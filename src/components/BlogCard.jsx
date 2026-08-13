@@ -10,7 +10,8 @@ const BlogCard = ({ title, snippet, img }) => {
         <h3 className="text-blue-600 font-semibold mb-1 cursor-pointer hover:underline">
           {title}
         </h3>
-        <p className="text-xs text-gray-600 line-clamp-2">
+        {/* Removed 'line-clamp-2' class so text won't be cut off */}
+        <p className="text-xs text-gray-600">
           {snippet}
         </p>
       </div>
