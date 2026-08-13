@@ -56,7 +56,7 @@ const BloodSearch = () => {
         </div>
 
         <p className="mt-6 text-sm max-w-2xl mx-auto leading-relaxed">
-          RaktaSanjal is a non-profitable service motive circle of youths purely devoted for the welfare of the society. We work to encourage and inspire people to donate blood and provide fresh blood to the needy without any cost.
+          Jivan Setu is a non-profitable service motive circle of youths purely devoted for the welfare of the society. We work to encourage and inspire people to donate blood and provide fresh blood to the needy without any cost.
         </p>
 
         {/* Changed to Teal for a nice contrast with the blue background */}

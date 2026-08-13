@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import BloodSearch from '../components/BloodSearch';
 import BlogCard from '../components/BlogCard';
 import Footer from '../components/Footer';
+import HeroSection from '../components/HeroSection';
 
 const Home = () => {
   // 5 dummy data entries for blogs
@@ -46,7 +47,7 @@ const Home = () => {
       <Navbar />
 
       {/* Hero and Search Component */}
-      <BloodSearch />
+      <HeroSection />
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 w-full flex-grow">
@@ -58,10 +59,10 @@ const Home = () => {
             {/* Welcome Section */}
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-blue-700 mb-4 border-b-2 border-gray-100 pb-2">
-                Welcome to RaktaSanjal
+                Welcome to Jivan Setu
               </h2>
               <p className="text-gray-700 text-sm leading-relaxed mb-3 text-justify">
-                RaktaSanjal is an online blood bank service dedicated to encouraging and inspiring people to donate blood and provide life-saving support to those in need. Our primary objective is to act as a reliable bridge connecting generous blood donors with patients facing medical emergencies. Leveraging modern technology, our platform matches you with the nearest available donors in a fraction of a second, eliminating the desperate search during critical hours. We believe that every individual has the power to be a hero; by registering as a donor, you are making a profound commitment to humanity and societal welfare. Beyond just connecting people, we actively work on spreading awareness about the health benefits of donating blood and breaking common myths surrounding it. Our vision is to build a self-sustaining community where no life is ever lost due to a shortage of blood. Join our growing network today, because a single drop of your blood can be the ray of hope for someone's tomorrow. Let us stand together for a healthier, safer society.
+                Jivan Setu is an online blood bank service dedicated to encouraging and inspiring people to donate blood and provide life-saving support to those in need. Our primary objective is to act as a reliable bridge connecting generous blood donors with patients facing medical emergencies. Leveraging modern technology, our platform matches you with the nearest available donors in a fraction of a second, eliminating the desperate search during critical hours. We believe that every individual has the power to be a hero; by registering as a donor, you are making a profound commitment to humanity and societal welfare. Beyond just connecting people, we actively work on spreading awareness about the health benefits of donating blood and breaking common myths surrounding it. Our vision is to build a self-sustaining community where no life is ever lost due to a shortage of blood. Join our growing network today, because a single drop of your blood can be the ray of hope for someone's tomorrow. Let us stand together for a healthier, safer society.
               </p>
             </section>
 

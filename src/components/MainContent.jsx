@@ -35,11 +35,11 @@ const MainContent = () => {
       {/* Welcome Section */}
       <section className="mb-8">
         <h2 className="text-2xl font-bold text-blue-700 mb-4 border-b-2 border-gray-100 pb-2">
-          Welcome to RaktaSanjal: <span className="text-xl font-normal">online blood bank</span>
+          Welcome to Jivan Setu: <span className="text-xl font-normal">online blood bank</span>
         </h2>
         <div className="text-gray-700 text-sm space-y-3 leading-relaxed">
           <p>
-            RaktaSanjal is an online blood bank service that works to encourage and inspire people to donate blood and provide fresh blood to needy ones to save their life. Our main objective is to act as a bridge between the blood donor and patient. Welfare of the society is our motto.
+            Jivan Setu is an online blood bank service that works to encourage and inspire people to donate blood and provide fresh blood to needy ones to save their life. Our main objective is to act as a bridge between the blood donor and patient. Welfare of the society is our motto.
           </p>
           <p>
             This website can match you with a donor near you in fraction of second. You can also register as a donor in this site and save someone's life. The need is constant, and your contribution is important for a healthy and reliable blood supply.

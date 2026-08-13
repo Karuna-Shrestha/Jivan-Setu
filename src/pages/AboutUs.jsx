@@ -1,0 +1,114 @@
+import React from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+
+const AboutUs = () => {
+  // 5 jana team member ko dummy data
+  const teamMembers = [
+    { id: 1, name: "Karuna Shrestha", role: "Co-Founder / Lead Developer", img: "/team1.jpg" },
+    { id: 2, name: "Suman Rai", role: "Co-Founder / UI/UX Designer", img: "/team2.jpg" },
+    { id: 3, name: "Ramesh Sharma", role: "Blood Bank Coordinator", img: "/team3.jpg" },
+    { id: 4, name: "Sita Khadka", role: "Public Relations", img: "/team4.jpg" },
+    { id: 5, name: "Bikash Thapa", role: "Technical Support", img: "/team5.jpg" }
+  ];
+
+  return (
+    <div className="font-sans min-h-screen flex flex-col bg-gray-50">
+      {/* Top Navigation */}
+      <Navbar />
+
+      {/* Main Content Area */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 w-full flex-grow">
+        <div className="flex flex-col lg:flex-row">
+          
+          {/* Left Column (3 Sections) */}
+          <div className="w-full lg:w-2/3 pr-0 lg:pr-8">
+            
+            {/* Section 1: About Us */}
+            <section className="mb-10 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h2 className="text-3xl font-bold text-blue-700 mb-4 border-b-2 border-blue-100 pb-2">
+                About Us
+              </h2>
+              <p className="text-gray-700 text-sm leading-relaxed text-justify">
+                Jivan Setu is a dedicated online blood bank management system established with the primary goal of saving lives. We bridge the critical gap between blood donors and patients in need during medical emergencies. By leveraging modern technology, our platform provides real-time tracking, immediate donor matching, and an easy-to-use interface to request and donate blood efficiently across Nepal.
+              </p>
+            </section>
+
+            {/* Section 2: Who We Are */}
+            <section className="mb-10 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h2 className="text-3xl font-bold text-blue-700 mb-4 border-b-2 border-blue-100 pb-2">
+                Who We Are
+              </h2>
+              <p className="text-gray-700 text-sm leading-relaxed text-justify">
+                We are a passionate team of developers, medical coordinators, and social workers committed to building a self-sustaining healthcare community. At Jivan Setu, we believe that no life should be lost due to the unavailability of blood. Our community is built on the foundation of compassion, voluntary service, and technological innovation. We not only connect people but also actively conduct awareness campaigns to eliminate the myths surrounding blood donation.
+              </p>
+            </section>
+
+            {/* Section 3: Our Team */}
+            <section className="mb-10 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h2 className="text-3xl font-bold text-blue-700 mb-6 border-b-2 border-blue-100 pb-2">
+                Our Team
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {teamMembers.map((member) => (
+                  <div key={member.id} className="flex flex-col items-center bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 transition-transform hover:-translate-y-1">
+                    {/* Team Member Image */}
+                    <div className="w-24 h-24 rounded-full bg-blue-100 overflow-hidden mb-4 border-2 border-blue-500 shadow-sm">
+                      <img 
+                        src={member.img} 
+                        alt={member.name} 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null; 
+                          e.target.src = "https://via.placeholder.com/150?text=No+Image" // Fallback image yadi aafno image halna birsiye ma
+                        }}
+                      />
+                    </div>
+                    {/* Team Member Info */}
+                    <h3 className="text-lg font-bold text-gray-800 text-center">{member.name}</h3>
+                    <p className="text-xs font-medium text-blue-600 text-center mt-1">{member.role}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+          </div>
+
+          {/* Right Column (Ads & Emergency Button - Exact copy from Home) */}
+          <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
+             <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded">
+              EMERGENCY: Request A Blood
+            </button>
+
+            {/* Ad Banners with Images */}
+            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+              <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
+            </div>
+
+            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+              <img src="/ad2.png" alt="Advertisement 2" className="w-full h-full object-cover" />
+            </div>
+            
+            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+              <img src="/ad3.png" alt="Advertisement 3" className="w-full h-full object-cover" />
+            </div>
+
+            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+              <img src="/ad4.png" alt="Advertisement 4" className="w-full h-full object-cover" />
+            </div>
+
+            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+              <img src="/ad5.png" alt="Advertisement 5" className="w-full h-full object-cover" />
+            </div>
+          </aside>
+
+        </div>
+      </div>
+
+      {/* Footer Component */}
+      <Footer />
+    </div>
+  );
+};
+
+export default AboutUs;
