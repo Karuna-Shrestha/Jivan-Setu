@@ -7,10 +7,12 @@ import {
   deleteBloodRequest,
 } from "../controllers/bloodRequestController.js";
 
+import verifyToken from "../middleware/authMiddleware.js";
+
 const router = express.Router();
 
 // Create blood request
-router.post("/", createBloodRequest);
+router.post("/", verifyToken, createBloodRequest);
 
 // Get all blood requests
 router.get("/", getBloodRequests);
@@ -19,6 +21,6 @@ router.get("/", getBloodRequests);
 router.get("/:id", getBloodRequestById);
 
 // Delete blood request
-router.delete("/:id", deleteBloodRequest);
+router.delete("/:id", verifyToken, deleteBloodRequest);
 
 export default router;

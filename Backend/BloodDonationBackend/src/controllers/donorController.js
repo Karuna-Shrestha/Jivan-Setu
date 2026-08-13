@@ -13,6 +13,9 @@ export const addDonor = (req, res) => {
     lastDonation,
   } = req.body;
 
+  //logged in user's id from JWT
+  const userId = req.user.id;
+
   if (!name || !age || !gender || !bloodGroup || !phone || !location) {
     return res.status(400).json({
       message: "Name, age, gender, blood group, phone and location are required",
@@ -21,13 +24,14 @@ export const addDonor = (req, res) => {
 
   const sql = `
     INSERT INTO donors
-    (name, age, gender, blood_group, phone, email, location, last_donation)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    (user_id, name, age, gender, blood_group, phone, email, location, last_donation)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
     [
+      userId,
       name,
       age,
       gender,
@@ -49,14 +53,34 @@ export const addDonor = (req, res) => {
       res.status(201).json({
         message: "Donor registered successfully",
         id: result.insertId,
+        user_id: userId,
       });
     }
   );
 };
 
 // Get All Donors
+// Get All Donors
 export const getDonors = (req, res) => {
-  const sql = "SELECT * FROM donors ORDER BY id DESC";
+  const sql = `
+    SELECT
+      d.id,
+      d.user_id,
+      d.name,
+      d.age,
+      d.gender,
+      d.blood_group,
+      d.phone,
+      d.email,
+      d.location,
+      d.last_donation,
+      d.created_at,
+      u.full_name AS user_name,
+      u.email AS user_email
+    FROM donors d
+    JOIN users u ON d.user_id = u.id
+    ORDER BY d.id DESC
+  `;
 
   db.query(sql, (err, result) => {
     if (err) {

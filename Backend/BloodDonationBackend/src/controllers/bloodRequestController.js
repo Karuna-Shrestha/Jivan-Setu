@@ -14,6 +14,10 @@ export const createBloodRequest = (req, res) => {
     requisition_file,
   } = req.body;
 
+  //logged in user's id from JWT
+  const userId = req.user.id;
+
+
   // Required fields check
   if (!requester_name || !phone || !blood_group || !hospital_name || !district) {
     return res.status(400).json({
@@ -25,6 +29,7 @@ export const createBloodRequest = (req, res) => {
   const sql = `
     INSERT INTO blood_requests
     (
+    user_id,
       requester_name,
       phone,
       blood_group,
@@ -39,6 +44,7 @@ export const createBloodRequest = (req, res) => {
   `;
 
   const values = [
+    userId,
     requester_name,
     phone,
     blood_group,
@@ -71,9 +77,26 @@ export const createBloodRequest = (req, res) => {
 // Get All Blood Requests
 export const getBloodRequests = (req, res) => {
   const sql = `
-    SELECT *
-    FROM blood_requests
-    ORDER BY created_at DESC
+    SELECT
+      br.id,
+      br.user_id,
+      br.requester_name,
+      br.phone,
+      br.blood_group,
+      br.units_needed,
+      br.hospital_name,
+      br.district,
+      br.address,
+      br.urgency,
+      br.requisition_file,
+      br.status,
+      br.created_at,
+      u.full_name AS user_name,
+      u.email AS user_email
+    FROM blood_requests br
+    JOIN users u
+      ON br.user_id = u.id
+    ORDER BY br.created_at DESC
   `;
 
   db.query(sql, (err, result) => {

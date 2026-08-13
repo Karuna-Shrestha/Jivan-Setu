@@ -1,42 +1,19 @@
-import jwt from "jsonwebtoken";
-import authMiddleware from "./authMiddleware.js";
+import express from "express";
 
-const adminMiddleware = (req, res, next) => {
-  try {
-    const authHeader = req.headers.authorization;
+import {
+  addDonor,
+  getDonors,
+  getDonorById,
+  deleteDonor,
+} from "../controllers/donorController.js";
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        success: false,
-        message: "No token provided",
-      });
-    }
+import authMiddleware from "../middleware/authMiddleware.js";
 
-    const token = authHeader.split(" ")[1];
+const router = express.Router();
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+router.post("/", authMiddleware, addDonor);
+router.get("/", getDonors);
+router.get("/:id", getDonorById);
+router.delete("/:id", deleteDonor);
 
-    if (decoded.role !== "Admin") {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied. Admin only.",
-      });
-    }
-
-    req.user = decoded;
-
-    next();
-  } catch (error) {
-    console.error(error);
-
-    return res.status(401).json({
-      success: false,
-      message: "Invalid or expired token",
-    });
-  }
-};
-
-export default adminMiddleware;
+export default router;
