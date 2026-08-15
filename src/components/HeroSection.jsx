@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // <- Routing ko lagi thapiyeko
 
 const HeroSection = () => {
   // State to track selected blood group
   const [selectedGroup, setSelectedGroup] = useState('');
+  const navigate = useNavigate(); // <- Navigate garna use gareko
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   const handleSearch = () => {
     if (selectedGroup) {
-      alert(`Searching for blood group: ${selectedGroup}`);
-      // Yaha backend API call garne logic hunchha
+      // Find blood click garda donor list page ma group pathayera redirect garne
+      navigate(`/donor-list?group=${encodeURIComponent(selectedGroup)}`);
     } else {
       alert('Please select a blood group first!');
     }
@@ -23,16 +25,14 @@ const HeroSection = () => {
       {/* Dark overlay for better text visibility */}
       <div className="absolute inset-0 bg-blue-900 bg-opacity-60"></div>
 
-      <div className="relative z-10 text-center text-white px-4">
+      <div className="relative z-10 text-center text-white px-4 w-full">
         <h1 className="text-4xl md:text-5xl font-bold mb-8 shadow-sm">
           Jivan Setu – Together, We Are Ready to Save Lives
         </h1>
 
-        {/* Search Box */}
-        <div className="bg-white bg-opacity-20 backdrop-blur-md p-6 rounded-lg max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6">
-          <span className="text-xl font-semibold w-full md:w-auto">Select Blood Group</span>
-          
-          <div className="flex flex-wrap justify-center gap-2 flex-grow">
+        {/* Search Box - Centered Perfectly */}
+        <div className="bg-white bg-opacity-20 backdrop-blur-md p-6 rounded-lg max-w-4xl mx-auto flex items-center justify-center">
+          <div className="flex flex-wrap justify-center gap-2">
             {bloodGroups.map((group) => (
               <button
                 key={group}
@@ -63,9 +63,12 @@ const HeroSection = () => {
           Nepal Blood is a non-profitable service motive circle of youths purely devoted for the welfare of the society. We work to encourage and inspire people to donate blood and provide fresh blood to the needy without any cost.
         </p>
 
-        <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded text-sm">
-          BECOME A NEW DONOR
-        </button>
+        <button 
+        onClick={() => navigate('/become-donor')}
+        className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded text-sm"
+        >
+        BECOME A NEW DONOR
+      </button>
       </div>
     </div>
   );

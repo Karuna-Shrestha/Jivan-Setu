@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import EmergencyModal from '../components/EmergencyModal';
 
 const AboutUs = () => {
+  // Emergency Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // 5 jana team member ko dummy data
   const teamMembers = [
     { id: 1, name: "Karuna Shrestha", role: "Co-Founder / Lead Developer", img: "/team1.jpg" },
@@ -60,7 +64,7 @@ const AboutUs = () => {
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.onerror = null; 
-                          e.target.src = "https://via.placeholder.com/150?text=No+Image" // Fallback image yadi aafno image halna birsiye ma
+                          e.target.src = "https://via.placeholder.com/150?text=No+Image"
                         }}
                       />
                     </div>
@@ -74,9 +78,12 @@ const AboutUs = () => {
 
           </div>
 
-          {/* Right Column (Ads & Emergency Button - Exact copy from Home) */}
+          {/* Right Column (Ads & Emergency Button) */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
-             <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded">
+             <button 
+               onClick={() => setIsModalOpen(true)}
+               className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
+             >
               EMERGENCY: Request A Blood
             </button>
 
@@ -104,6 +111,9 @@ const AboutUs = () => {
 
         </div>
       </div>
+
+      {/* Emergency Modal Component */}
+      <EmergencyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* Footer Component */}
       <Footer />

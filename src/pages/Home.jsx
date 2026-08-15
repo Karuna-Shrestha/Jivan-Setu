@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
-import BloodSearch from '../components/BloodSearch';
 import BlogCard from '../components/BlogCard';
 import Footer from '../components/Footer';
 import HeroSection from '../components/HeroSection';
+import EmergencyModal from '../components/EmergencyModal';
 
 const Home = () => {
+  // State for Emergency Modal popup
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // 5 dummy data entries for blogs
   const blogsData = [
     {
@@ -42,7 +45,7 @@ const Home = () => {
 
   return (
     <div className="font-sans min-h-screen flex flex-col bg-white">
-      
+
       {/* Top Navigation */}
       <Navbar />
 
@@ -52,10 +55,10 @@ const Home = () => {
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 w-full flex-grow">
         <div className="flex flex-col lg:flex-row">
-          
+
           {/* Left Column (Static Info + Dynamic Blogs) */}
           <div className="w-full lg:w-2/3 pr-0 lg:pr-8">
-            
+
             {/* Welcome Section */}
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-blue-700 mb-4 border-b-2 border-gray-100 pb-2">
@@ -106,7 +109,11 @@ const Home = () => {
 
           {/* Right Column */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
-             <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded">
+             {/* Emergency Button linked to Modal */}
+             <button 
+               onClick={() => setIsModalOpen(true)}
+               className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
+             >
               EMERGENCY: Request A Blood
             </button>
 
@@ -118,7 +125,7 @@ const Home = () => {
             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
               <img src="/ad2.png" alt="Advertisement 2" className="w-full h-full object-cover" />
             </div>
-            
+
             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
               <img src="/ad3.png" alt="Advertisement 3" className="w-full h-full object-cover" />
             </div>
@@ -139,6 +146,9 @@ const Home = () => {
 
         </div>
       </div>
+
+      {/* Emergency Modal Popup Component */}
+      <EmergencyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* Footer Component */}
       <Footer />
