@@ -1,8 +1,8 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom'; // 1. URL path thahuna useLocation import gareko
+import { useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-  const location = useLocation(); // 2. Current path nikalne hook
+  const location = useLocation(); 
 
   return (
     <header className="w-full shadow-md z-50 bg-white">
@@ -29,7 +29,6 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* 3. 'active' prop ma current path check garera pathaidiyeko chhu */}
         <nav className="hidden md:flex gap-2 items-center">
           <NavItem label="Home" href="/" active={location.pathname === '/'} />
           <NavItem label="About Us" href="/about" active={location.pathname === '/about'} />
@@ -44,7 +43,7 @@ const Navbar = () => {
   );
 };
 
-// Reusable component: active bhaye bhane 'bg-blue-800' class lagchha
+// Reusable component: active 'bg-blue-800' class 
 const NavItem = ({ label, active, href }) => {
   return (
     <a 

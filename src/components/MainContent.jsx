@@ -1,7 +1,6 @@
 import React from 'react';
 
 const MainContent = () => {
-  // Dummy data for blogs based on the reference image
   const blogs = [
     {
       id: 1,

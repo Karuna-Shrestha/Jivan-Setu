@@ -10,6 +10,8 @@ import DonorList from './pages/DonorList';
 import ContactUs from './pages/ContactUs';
 import BecomeDonor from './pages/BecomeDonor';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import BlogDetails from './pages/BlogDetails.jsx';
+import Foundation from './components/Foundation';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/become-donor" element={<BecomeDonor />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/foundation" element={<Foundation />} />
       </Routes>
     </Router>
   );

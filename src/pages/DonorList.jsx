@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const DonorList = () => {
-  // 10 jana real-looking mock donors ko data
+  // dummy blood donors
   const donorsData = [
     { id: 1, name: "Ram Karki", address: "Kathmandu", phone: "9841000001", bloodGroup: "O+" },
     { id: 2, name: "Hari Thapa", address: "Lalitpur", phone: "9851000002", bloodGroup: "A+" },
@@ -22,7 +22,7 @@ const DonorList = () => {
 
   const location = useLocation();
 
-  // URL bata group nikalne function
+  // function for extracting group from url
   const getInitialGroup = () => {
     const searchParams = new URLSearchParams(location.search);
     const group = searchParams.get('group');
@@ -31,10 +31,10 @@ const DonorList = () => {
     return validGroups.includes(group) ? group : 'All';
   };
 
-  // Filter garna ko lagi state
+  // state for filter
   const [selectedGroup, setSelectedGroup] = useState(getInitialGroup());
 
-  // Blood group ko list ('All' sahit)
+  // Blood group list
   const bloodGroups = ['All', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   // Select gareko blood group anusaar data filter garne logic
@@ -50,7 +50,7 @@ const DonorList = () => {
       {/* Main Content Area */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-grow">
         
-        {/* Page Header ra Search/Filter */}
+        {/* Page Header and Search/Filter */}
         <div className="bg-white p-6 rounded-lg shadow-sm border border-blue-200 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <h2 className="text-3xl font-bold text-blue-700">Donor List</h2>
@@ -119,7 +119,7 @@ const DonorList = () => {
                     </tr>
                   ))
                 ) : (
-                  // Yadi kasaile khojeko blood group vetiyena bhane
+                  // if no required blood is found
                   <tr>
                     <td colSpan="5" className="px-6 py-10 text-center text-gray-500 font-medium">
                       Sorry, no donors found for <span className="font-bold text-red-600">{selectedGroup}</span> blood group.

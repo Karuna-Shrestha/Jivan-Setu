@@ -34,10 +34,10 @@ const BecomeDonor = () => {
       {/* Main Content Area */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full flex-grow flex items-center justify-center">
         
-        {/* Premium Card Container */}
+        {/* Card Container */}
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row w-full border border-gray-100">
           
-          {/* Left Side: Motivation & Hero Section (Blue Gradient) */}
+          {/* Left Side: Motivation & Hero Section */}
           <div className="lg:w-2/5 bg-gradient-to-br from-blue-700 to-blue-900 text-white p-10 flex flex-col justify-between">
             <div>
               <h2 className="text-4xl font-extrabold mb-2 tracking-tight">Let's Be a Hero</h2>
@@ -58,7 +58,6 @@ const BecomeDonor = () => {
               </p>
             </div>
 
-            {/* Nepali Font & Thank You */}
             <div className="text-center mt-auto bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-blue-400 border-opacity-30">
               <h3 className="text-3xl font-bold text-pink-400 mb-3 drop-shadow-md" style={{ fontFamily: '"Noto Sans Devanagari", sans-serif' }}>
                 रक्तदान जीवनदान
@@ -67,7 +66,7 @@ const BecomeDonor = () => {
             </div>
           </div>
 
-          {/* Right Side: Donor Registration Form */}
+          {/* Donor Registration Form */}
           <div className="lg:w-3/5 p-10 bg-white">
             <h3 className="text-2xl font-bold text-blue-800 mb-8 border-b-2 border-gray-100 pb-4">
               Donor Registration Form

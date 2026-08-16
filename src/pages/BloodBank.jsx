@@ -7,7 +7,7 @@ const BloodBank = () => {
   // Emergency Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Real 10 Blood Bank centers in Nepal
+  // Blood Bank centers
   const [banks, setBanks] = useState([
     {
       id: 1,
@@ -333,16 +333,16 @@ const BloodBank = () => {
 
           </div>
 
-          {/* Right Column (Ads & Emergency Button) */}
+          {/* Right Column, Ads & Emergency Button */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
              <button 
                onClick={() => setIsModalOpen(true)}
                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
              >
-              EMERGENCY: Request A Blood
+              EMERGENCY: Request Blood
             </button>
 
-            {/* Ad Banners with Images */}
+            {/* Ad Banners */}
             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
               <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
             </div>
