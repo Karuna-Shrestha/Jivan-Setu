@@ -25,7 +25,7 @@ const AboutUs = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 w-full flex-grow">
         <div className="flex flex-col lg:flex-row">
           
-          {/* Left Column (3 Sections) */}
+          {/* Left Column */}
           <div className="w-full lg:w-2/3 pr-0 lg:pr-8">
             
             {/* Section 1: About Us */}
@@ -78,16 +78,16 @@ const AboutUs = () => {
 
           </div>
 
-          {/* Right Column (Ads & Emergency Button) */}
+          {/* Right Column, Ads & Emergency Button */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
              <button 
                onClick={() => setIsModalOpen(true)}
                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
              >
-              EMERGENCY: Request A Blood
+              EMERGENCY: Request Blood
             </button>
 
-            {/* Ad Banners with Images */}
+            {/* Ad Banners */}
             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
               <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
             </div>

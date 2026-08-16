@@ -4,6 +4,7 @@ import BlogCard from '../components/BlogCard';
 import Footer from '../components/Footer';
 import HeroSection from '../components/HeroSection';
 import EmergencyModal from '../components/EmergencyModal';
+import Foundation from '../components/Foundation'; // Foundation Import गरियो
 
 const Home = () => {
   // State for Emergency Modal popup
@@ -98,6 +99,7 @@ const Home = () => {
                 {blogsData.map((blog) => (
                   <BlogCard 
                     key={blog.id} 
+                    id={blog.id}
                     title={blog.title} 
                     snippet={blog.snippet} 
                     img={blog.img} 
@@ -114,10 +116,10 @@ const Home = () => {
                onClick={() => setIsModalOpen(true)}
                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
              >
-              EMERGENCY: Request A Blood
+              EMERGENCY: Request Blood
             </button>
 
-            {/* Ad Banners with Images */}
+            {/* Ad Banners */}
             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
               <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
             </div>
@@ -149,6 +151,9 @@ const Home = () => {
 
       {/* Emergency Modal Popup Component */}
       <EmergencyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* Foundation Component */}
+      <Foundation />
 
       {/* Footer Component */}
       <Footer />

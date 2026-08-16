@@ -30,7 +30,7 @@ const HeroSection = () => {
           Jivan Setu – Together, We Are Ready to Save Lives
         </h1>
 
-        {/* Search Box - Centered Perfectly */}
+        {/* Search Box */}
         <div className="bg-white bg-opacity-20 backdrop-blur-md p-6 rounded-lg max-w-4xl mx-auto flex items-center justify-center">
           <div className="flex flex-wrap justify-center gap-2">
             {bloodGroups.map((group) => (

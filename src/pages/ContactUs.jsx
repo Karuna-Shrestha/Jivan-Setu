@@ -18,7 +18,7 @@ const ContactUs = () => {
     e.preventDefault();
     console.log('Enquiry Details:', formData);
     alert('Thank you for reaching out! Your message has been sent successfully.');
-    // Form submit bhayepachi khali banaune
+    // when form submited then it becomes empty
     setFormData({ name: '', email: '', phone: '', message: '' });
   };
 
@@ -48,7 +48,7 @@ const ContactUs = () => {
             
             <div className="space-y-6">
               
-              {/* Location with Premium SVG Icon */}
+              {/* Location Icon */}
               <div className="flex items-start gap-4">
                 <div className="bg-blue-200 p-3 rounded-full text-blue-700 shadow-sm flex-shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -62,7 +62,7 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              {/* Phone with Premium SVG Icon */}
+              {/* Phone Icon */}
               <div className="flex items-start gap-4">
                 <div className="bg-blue-200 p-3 rounded-full text-blue-700 shadow-sm flex-shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -75,7 +75,7 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              {/* Email with Premium SVG Icon */}
+              {/* Email Icon */}
               <div className="flex items-start gap-4">
                 <div className="bg-blue-200 p-3 rounded-full text-blue-700 shadow-sm flex-shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

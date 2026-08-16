@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
     console.log('Registering Donor:', formData);
     alert('Registration Submitted successfully!');
-    // Yaha backend API call garne logic aauchha (e.g., axios.post('/api/register', formData))
+    // backend API calling logic 
   };
 
   return (

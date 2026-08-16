@@ -9,7 +9,6 @@ const RightSidebar = () => {
         EMERGENCY: Request Blood
       </button>
       
-      {/* Promo Banner - Changed to Blue Theme */}
       <div className="w-full bg-blue-50 border border-blue-200 p-6 flex flex-col items-center justify-center rounded-lg shadow-sm">
         <h3 className="text-xl font-bold text-blue-700 mb-2">Be a Hero</h3>
         <p className="text-center text-sm text-gray-600 mb-4">Donate blood and save lives today.</p>

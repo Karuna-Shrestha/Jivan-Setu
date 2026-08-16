@@ -20,7 +20,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('🚨 Emergency blood request submitted successfully! Nearby donors & admins have been notified.');
+    alert('Emergency blood request submitted successfully! Nearby donors & admins have been notified.');
     setFormData({ contactPerson: '', phone: '', bloodGroup: 'O+', message: '' });
     onClose();
   };
@@ -47,7 +47,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
         {/* Modal Body */}
         <div className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
           
-          {/* Important Notice Box (Blue Theme Accent) */}
+          {/* Important Notice Box */}
           <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg shadow-sm">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-blue-800 font-bold text-sm uppercase tracking-wider">⚠️ Important Notice:</span>
@@ -102,7 +102,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Message with Character Counter */}
+            {/* Message */}
             <div>
               <div className="flex justify-between items-center mb-1">
                 <label className="block text-xs font-bold text-gray-700 uppercase">Message (Patient Details, Location & Problem)</label>
@@ -121,7 +121,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
               ></textarea>
             </div>
 
-            {/* Submit Button (Blue Theme) */}
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 px-4 rounded-lg shadow-md transition duration-200 uppercase tracking-wider text-sm flex items-center justify-center gap-2 cursor-pointer"

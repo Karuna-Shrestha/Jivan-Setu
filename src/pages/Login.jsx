@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     alert(`Logging in with: ${email}`);
-    // Yaha backend API call garne logic aauchha (e.g., axios.post('/api/login'))
+    // backend API calling logic 
   };
 
   return (
