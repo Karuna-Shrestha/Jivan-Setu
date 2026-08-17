@@ -12,6 +12,8 @@ import BecomeDonor from './pages/BecomeDonor';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import BlogDetails from './pages/BlogDetails.jsx';
 import Foundation from './components/Foundation';
+import AdminLogin from './pages/AdminLogin.jsx';
+import AdminDashboard from './pages/AdminDashboard.jsx';
 
 function App() {
   return (
@@ -29,6 +31,9 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path="/foundation" element={<Foundation />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        
       </Routes>
     </Router>
   );
