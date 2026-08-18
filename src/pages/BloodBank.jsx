@@ -1,105 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmergencyModal from '../components/EmergencyModal';
 
 const BloodBank = () => {
+  const navigate = useNavigate();
   // Emergency Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Blood Bank centers
-  const [banks, setBanks] = useState([
-    {
-      id: 1,
-      name: "Central Blood Transfusion Service (Nepal Red Cross Society)",
-      location: "Bhrikutimandap, Kathmandu",
-      contact: "01-4225344",
-      email: "nrcs@nrcs.org",
-      website: "https://www.nrcs.org",
-      image: "/center1.webp"
-    },
-    {
-      id: 2,
-      name: "Teaching Hospital Blood Bank (TUTH)",
-      location: "Maharajgunj, Kathmandu",
-      contact: "01-4411043",
-      email: "tuthbloodbank@gmail.com",
-      website: "https://www.tuteachinghospital.edu.np",
-      image: "/centre2.jpg"
-    },
-    {
-      id: 3,
-      name: "Bir Hospital Blood Transfusion Unit",
-      location: "Mahabouddha, Kathmandu",
-      contact: "01-4221119",
-      email: "birhospital@gov.np",
-      website: "https://www.birhospital.gov.np",
-      image: "centre3.jpg"
-    },
-    {
-      id: 4,
-      name: "Patan Hospital Blood Bank",
-      location: "Lagankhel, Lalitpur",
-      contact: "01-5522266",
-      email: "info@patanhospital.org.np",
-      website: "https://www.patanhospital.org.np",
-      image: "centre4.jpg"
-    },
-    {
-      id: 5,
-      name: "B.P. Koirala Memorial Cancer Hospital Blood Bank",
-      location: "Bharatpur, Chitwan",
-      contact: "056-527003",
-      email: "bpkmch@ntc.net.np",
-      website: "https://www.bpkmch.org.np",
-      image: "centre5.jpg"
-    },
-    {
-      id: 6,
-      name: "Nepal Red Cross Society, Regional Blood Transfusion Service",
-      location: "Dharan, Sunsari",
-      contact: "025-520144",
-      email: "rbtsdharan@gmail.com",
-      website: "https://www.nrcs.org",
-      image: "centre6.jpg"
-    },
-    {
-      id: 7,
-      name: "Birendra Hospital Blood Bank",
-      location: "Chhauni, Kathmandu",
-      contact: "01-4271920",
-      email: "birendrahospital@nepalarmy.mil.np",
-      website: "https://www.nepalarmy.mil.np",
-      image: "centre7.jpg"
-    },
-    {
-      id: 8,
-      name: "Civil Service Hospital Blood Bank",
-      location: "Minbhawan, Kathmandu",
-      contact: "01-4107000",
-      email: "info@civilhospital.gov.np",
-      website: "https://www.civilhospital.gov.np",
-      image: "centre8.jpg"
-    },
-    {
-      id: 9,
-      name: "Bhaktapur Hospital Blood Bank",
-      location: "Bhaktapur Durbar Square Area, Bhaktapur",
-      contact: "01-6610768",
-      email: "bhaktapurhospital@gov.np",
-      website: "https://www.bhaktapurhospital.gov.np",
-      image: "centre9.jpg"
-    },
-    {
-      id: 10,
-      name: "Nepalgunj Red Cross Blood Bank",
-      location: "Nepalgunj, Banke",
-      contact: "081-520165",
-      email: "nrcsnepalgunj@gmail.com",
-      website: "https://www.nrcs.org",
-      image: "centre10.jpg"
+  // इमर्जेन्सी बटन क्लिक गर्दा चल्ने सेकक्युरिटी फङ्गसन
+  const handleEmergencyClick = () => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (!currentUser) {
+      toast.error('You have to Login first to request blood!', {
+        style: {
+          background: '#fee2e2',
+          color: '#b91c1c',
+          fontWeight: 'bold',
+          border: '1px solid #f87171',
+        },
+        iconTheme: {
+          primary: '#dc2626',
+          secondary: '#fff',
+        },
+      });
+      navigate('/login');
+    } else {
+      setIsModalOpen(true);
     }
-  ]);
+  };
+
+  // Default Blood Bank centers
+  const defaultBanks = [
+    {
+      id: 1, name: "Central Blood Transfusion Service (Nepal Red Cross Society)", location: "Bhrikutimandap, Kathmandu", contact: "01-4225344", email: "nrcs@nrcs.org", website: "https://www.nrcs.org", image: "/center1.webp"
+    },
+    {
+      id: 2, name: "Teaching Hospital Blood Bank (TUTH)", location: "Maharajgunj, Kathmandu", contact: "01-4411043", email: "tuthbloodbank@gmail.com", website: "https://www.tuteachinghospital.edu.np", image: "/centre2.jpg"
+    },
+    {
+      id: 3, name: "Bir Hospital Blood Transfusion Unit", location: "Mahabouddha, Kathmandu", contact: "01-4221119", email: "birhospital@gov.np", website: "https://www.birhospital.gov.np", image: "centre3.jpg"
+    },
+    {
+      id: 4, name: "Patan Hospital Blood Bank", location: "Lagankhel, Lalitpur", contact: "01-5522266", email: "info@patanhospital.org.np", website: "https://www.patanhospital.org.np", image: "centre4.jpg"
+    },
+    {
+      id: 5, name: "B.P. Koirala Memorial Cancer Hospital Blood Bank", location: "Bharatpur, Chitwan", contact: "056-527003", email: "bpkmch@ntc.net.np", website: "https://www.bpkmch.org.np", image: "centre5.jpg"
+    },
+    {
+      id: 6, name: "Nepal Red Cross Society, Regional Blood Transfusion Service", location: "Dharan, Sunsari", contact: "025-520144", email: "rbtsdharan@gmail.com", website: "https://www.nrcs.org", image: "centre6.jpg"
+    },
+    {
+      id: 7, name: "Birendra Hospital Blood Bank", location: "Chhauni, Kathmandu", contact: "01-4271920", email: "birendrahospital@nepalarmy.mil.np", website: "https://www.nepalarmy.mil.np", image: "centre7.jpg"
+    },
+    {
+      id: 8, name: "Civil Service Hospital Blood Bank", location: "Minbhawan, Kathmandu", contact: "01-4107000", email: "info@civilhospital.gov.np", website: "https://www.civilhospital.gov.np", image: "centre8.jpg"
+    },
+    {
+      id: 9, name: "Bhaktapur Hospital Blood Bank", location: "Bhaktapur Durbar Square Area, Bhaktapur", contact: "01-6610768", email: "bhaktapurhospital@gov.np", website: "https://www.bhaktapurhospital.gov.np", image: "centre9.jpg"
+    },
+    {
+      id: 10, name: "Nepalgunj Red Cross Blood Bank", location: "Nepalgunj, Banke", contact: "081-520165", email: "nrcsnepalgunj@gmail.com", website: "https://www.nrcs.org", image: "centre10.jpg"
+    }
+  ];
+
+  const [banks, setBanks] = useState(defaultBanks);
+
+  // When the page opens, new Blood Banks approved by the Admin will be pulled
+  useEffect(() => {
+    const approvedBBs = JSON.parse(localStorage.getItem('bloodBanks')) || [];
+    setBanks([...approvedBBs, ...defaultBanks]);
+  }, []);
 
   // Form state for adding a new blood bank
   const [showForm, setShowForm] = useState(false);
@@ -112,6 +86,16 @@ const BloodBank = () => {
     imageFile: null
   });
 
+  const handleToggleForm = () => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser && !showForm) {
+      toast.error("You have to login first to add Blood Bank!");
+      navigate('/login');
+      return;
+    }
+    setShowForm(!showForm);
+  };
+
   const handleInputChange = (e) => {
     setNewBank({ ...newBank, [e.target.name]: e.target.value });
   };
@@ -122,10 +106,13 @@ const BloodBank = () => {
     }
   };
 
+  // Send to Pending List for Approval
   const handleAddBank = (e) => {
     e.preventDefault();
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
     if (!newBank.name || !newBank.location || !newBank.contact) {
-      alert("Please fill in at least Name, Location, and Contact!");
+      toast.error("Please fill in at least Name, Location, and Contact!");
       return;
     }
 
@@ -134,20 +121,28 @@ const BloodBank = () => {
       imagePath = URL.createObjectURL(newBank.imageFile);
     }
 
-    const bankToAdd = {
-      id: banks.length + 1,
+    const bankRequest = {
+      id: Date.now(), 
       name: newBank.name,
       location: newBank.location,
       contact: newBank.contact,
+      phone: newBank.contact, // To match phone and contact in the admin panel
       email: newBank.email,
       website: newBank.website,
-      image: imagePath
+      image: imagePath,
+      requestedBy: currentUser.email,
+      status: 'pending'
     };
 
-    setBanks([bankToAdd, ...banks]);
+    // Add to Pending List
+    const pendingBBs = JSON.parse(localStorage.getItem('pendingBloodBanks')) || [];
+    pendingBBs.push(bankRequest);
+    localStorage.setItem('pendingBloodBanks', JSON.stringify(pendingBBs));
+
     setNewBank({ name: '', location: '', contact: '', email: '', website: '', imageFile: null });
     setShowForm(false);
-    alert("Blood Bank Center added successfully!");
+    
+    toast.success("Request submitted successfully! It will appear here once Admin approves it.", { duration: 4000 });
   };
 
   return (
@@ -159,7 +154,7 @@ const BloodBank = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-10 w-full flex-grow">
         <div className="flex flex-col lg:flex-row">
           
-          {/* Left Column (Blood Banks List & Add Form) */}
+          {/* Left Column, Blood Banks List & Add Form */}
           <div className="w-full lg:w-2/3 pr-0 lg:pr-8">
             
             {/* Header Title & Add Button */}
@@ -169,8 +164,8 @@ const BloodBank = () => {
                 <p className="text-sm text-gray-600 mt-1">Directory of verified blood banks and transfusion centers in Nepal</p>
               </div>
               <button 
-                onClick={() => setShowForm(!showForm)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-semibold text-sm transition shadow-sm"
+                onClick={handleToggleForm}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-semibold text-sm transition shadow-sm cursor-pointer"
               >
                 {showForm ? "Cancel" : "+ Add Blood Bank Center"}
               </button>
@@ -178,8 +173,9 @@ const BloodBank = () => {
 
             {/* Collapsible Add Blood Bank Form with File Upload */}
             {showForm && (
-              <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-blue-200">
-                <h3 className="text-lg font-bold text-blue-800 mb-4">Add a New Blood Bank Center</h3>
+              <div className="mb-8 bg-white p-6 rounded-lg shadow-sm border border-blue-200 animate-fadeIn">
+                <h3 className="text-lg font-bold text-blue-800 mb-2">Request to Add New Blood Bank</h3>
+                <p className="text-xs text-gray-500 mb-4">Your submission will be reviewed by our admin before appearing publicly.</p>
                 <form onSubmit={handleAddBank} className="space-y-4">
                   <div>
                     <label className="block text-xs font-medium text-gray-700">Center Name</label>
@@ -244,7 +240,7 @@ const BloodBank = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-700">Upload Center Photo</label>
+                    <label className="block text-xs font-medium text-gray-700">Upload Center Photo (Optional)</label>
                     <input 
                       type="file" 
                       accept="image/*"
@@ -254,9 +250,9 @@ const BloodBank = () => {
                   </div>
                   <button 
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md text-sm transition"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md text-sm transition cursor-pointer"
                   >
-                    Save Blood Bank Center
+                    Submit for Approval
                   </button>
                 </form>
               </div>
@@ -265,8 +261,15 @@ const BloodBank = () => {
             {/* Blood Banks Cards List with Image Display & SVG Icons */}
             <div className="space-y-4">
               {banks.map((bank) => (
-                <div key={bank.id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+                <div key={bank.id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col sm:flex-row gap-4 items-center sm:items-start relative">
                   
+                  {/* Approved Badge (यदि यो नयाँ थपिएको हो भने देखाउन) */}
+                  {bank.status === 'approved' && (
+                    <span className="absolute top-2 right-2 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md">
+                      Verified
+                    </span>
+                  )}
+
                   {/* Center Image Box */}
                   <div className="w-full sm:w-36 h-28 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden border border-gray-200 flex items-center justify-center">
                     {bank.image ? (
@@ -282,7 +285,7 @@ const BloodBank = () => {
 
                   {/* Center Details */}
                   <div className="flex-grow w-full">
-                    <h3 className="text-lg font-bold text-blue-700 mb-3">{bank.name}</h3>
+                    <h3 className="text-lg font-bold text-blue-700 mb-3 pr-12">{bank.name}</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700">
                       
                       {/* Location Icon */}
@@ -336,32 +339,32 @@ const BloodBank = () => {
           {/* Right Column, Ads & Emergency Button */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
              <button 
-               onClick={() => setIsModalOpen(true)}
+               onClick={handleEmergencyClick}
                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
              >
-              EMERGENCY: Request Blood
-            </button>
+               EMERGENCY: Request Blood
+             </button>
 
-            {/* Ad Banners */}
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
-            </div>
+             {/* Ad Banners */}
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad2.png" alt="Advertisement 2" className="w-full h-full object-cover" />
-            </div>
-            
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad3.png" alt="Advertisement 3" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad2.png" alt="Advertisement 2" className="w-full h-full object-cover" />
+             </div>
+             
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad3.png" alt="Advertisement 3" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad4.png" alt="Advertisement 4" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad4.png" alt="Advertisement 4" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad5.png" alt="Advertisement 5" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad5.png" alt="Advertisement 5" className="w-full h-full object-cover" />
+             </div>
           </aside>
 
         </div>

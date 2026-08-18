@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast'; // प्रिमियम पपअप थपियो
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -21,9 +22,30 @@ const BecomeDonor = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('New Donor Data:', formData);
-    alert('Thank you for registering as a donor! You are a true hero.');
-    // Form clear garne
+    
+    // Admin Approval को लागि Pending लिस्टमा पठाउने लजिक
+    const pendingDonors = JSON.parse(localStorage.getItem('pendingDonors')) || [];
+    
+    const newDonorRequest = {
+      id: Date.now(),
+      name: formData.name,
+      bloodGroup: formData.bloodGroup,
+      phone: formData.phone,
+      location: formData.address, // Admin प्यानलमा location प्रयोग भएकोले म्याप गरिएको
+      age: formData.age,
+      gender: formData.gender,
+      lastDonation: formData.lastDonation,
+      requestedBy: 'Public Form',
+      status: 'pending'
+    };
+
+    pendingDonors.push(newDonorRequest);
+    localStorage.setItem('pendingDonors', JSON.stringify(pendingDonors));
+
+    // प्रिमियम Success Toast
+    toast.success('Thank you for registering! Your request is pending Admin Approval.', { duration: 4000 });
+    
+    // Form clear गर्ने
     setFormData({ name: '', age: '', gender: '', bloodGroup: 'A+', phone: '', lastDonation: '', address: '' });
   };
 
@@ -165,7 +187,7 @@ const BecomeDonor = () => {
 
               {/* Address */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Full Address</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Location</label>
                 <input
                   type="text"
                   name="address"
@@ -181,7 +203,7 @@ const BecomeDonor = () => {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-4 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wider text-sm"
+                  className="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-4 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-wider text-sm cursor-pointer"
                 >
                   Register & Become a Hero
                 </button>

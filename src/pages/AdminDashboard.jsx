@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -12,19 +12,23 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const navigate = useNavigate();
 
-  // Data State (Centralized here so both Overview and Pending Tabs can access it)
-  const [pendingBloodBanks, setPendingBloodBanks] = useState([
-    { id: 1, name: 'LifeCare Blood Center', location: 'Kathmandu, Bagmati', contact: '9841000000', date: 'Aug 17, 2026' },
-    { id: 2, name: 'Helping Hands Bank', location: 'Pokhara, Gandaki', contact: '9801234567', date: 'Aug 16, 2026' },
-  ]);
-  const [pendingDonors, setPendingDonors] = useState([
-    { id: 1, name: 'Suman Rai', bloodGroup: 'O+', location: 'Itahari, Koshi', contact: '9812345678', date: 'Aug 17, 2026' },
-  ]);
-  const [pendingUpdates, setPendingUpdates] = useState([
-    { id: 1, name: 'Bikash Tamang', type: 'Address Change', oldData: 'Dharan, Koshi', newData: 'Itahari, Koshi', date: 'Aug 16, 2026' },
-    { id: 2, name: 'Anita Sharma', type: 'Contact Update', oldData: '9841111111', newData: '9802222222', date: 'Aug 15, 2026' },
-  ]);
+  // Real-world Data State (LocalStorage बाट तान्ने)
+  const [pendingBloodBanks, setPendingBloodBanks] = useState([]);
+  const [pendingDonors, setPendingDonors] = useState([]);
+  const [pendingUpdates, setPendingUpdates] = useState([]);
 
+  // पेज लोड हुँदा LocalStorage बाट सबै pending डाटाहरू ल्याउने
+  useEffect(() => {
+    const storedBBs = JSON.parse(localStorage.getItem('pendingBloodBanks')) || [];
+    const storedDonors = JSON.parse(localStorage.getItem('pendingDonors')) || [];
+    const storedUpdates = JSON.parse(localStorage.getItem('pendingUpdates')) || [];
+
+    setPendingBloodBanks(storedBBs);
+    setPendingDonors(storedDonors);
+    setPendingUpdates(storedUpdates);
+  }, []);
+
+  // जम्मा पेन्डिङ सङ्ख्या डाइनामिक रूपमा निकाल्ने
   const totalPending = pendingBloodBanks.length + pendingDonors.length + pendingUpdates.length;
 
   const handleLogout = () => {

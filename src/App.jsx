@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast'; // Import गरियो
+import { Toaster } from 'react-hot-toast'; 
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
@@ -14,11 +14,19 @@ import BlogDetails from './pages/BlogDetails.jsx';
 import Foundation from './components/Foundation';
 import AdminLogin from './pages/AdminLogin.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
+import UserDashboard from './pages/UserDashboard.jsx';
 
 function App() {
   return (
     <Router>
-      <Toaster position="top-right" reverseOrder={false} /> {/* यहाँ थपियो */}
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          success: { style: { background: '#1e3a8a', color: '#fff', fontWeight: 'bold' } }, // Jivan Setu Blue
+          error: { style: { background: '#dc2626', color: '#fff', fontWeight: 'bold' } },   // Jivan Setu Red
+        }} 
+      /> 
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -33,7 +41,7 @@ function App() {
         <Route path="/foundation" element={<Foundation />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        
+        <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
     </Router>
   );

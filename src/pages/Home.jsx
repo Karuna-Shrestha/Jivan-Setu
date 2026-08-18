@@ -1,14 +1,41 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 1. useNavigate इम्पोर्ट गरियो
+import toast from 'react-hot-toast'; // 2. प्रिमियम पपअपको लागि toast इम्पोर्ट गरियो
 import Navbar from '../components/Navbar';
 import BlogCard from '../components/BlogCard';
 import Footer from '../components/Footer';
 import HeroSection from '../components/HeroSection';
 import EmergencyModal from '../components/EmergencyModal';
-import Foundation from '../components/Foundation'; // Foundation Import गरियो
+import Foundation from '../components/Foundation'; 
 
 const Home = () => {
-  // State for Emergency Modal popup
+  const navigate = useNavigate(); // 3. navigate हुक इनिसियलाइज गरिएको
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 4. इमर्जेन्सी बटन क्लिक गर्दा चल्ने सेकक्युरिटी फङ्गसन
+  const handleEmergencyClick = () => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (!currentUser) {
+      // लगिन छैन भने प्रिमियम थिम-बेस्ड एरर पपअप देखाउने र लगिन पेजमा पठाउने
+      toast.error('You have to Login first to request blood!', {
+        style: {
+          background: '#fee2e2',
+          color: '#b91c1c',
+          fontWeight: 'bold',
+          border: '1px solid #f87171',
+        },
+        iconTheme: {
+          primary: '#dc2626',
+          secondary: '#fff',
+        },
+      });
+      navigate('/login');
+    } else {
+      // लगिन छ भने मात्र इमर्जेन्सी मोडल खोल्ने
+      setIsModalOpen(true);
+    }
+  };
 
   // 5 dummy data entries for blogs
   const blogsData = [
@@ -111,38 +138,38 @@ const Home = () => {
 
           {/* Right Column */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
-             {/* Emergency Button linked to Modal */}
+             {/* 5. यहाँ setIsModalOpen को सट्टा नयाँ handleEmergencyClick रासिएको छ */}
              <button 
-               onClick={() => setIsModalOpen(true)}
+               onClick={handleEmergencyClick}
                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
              >
-              EMERGENCY: Request Blood
-            </button>
+               EMERGENCY: Request Blood
+             </button>
 
-            {/* Ad Banners */}
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
-            </div>
+             {/* Ad Banners */}
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad1.png" alt="Advertisement 1" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad2.png" alt="Advertisement 2" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad2.png" alt="Advertisement 2" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad3.png" alt="Advertisement 3" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad3.png" alt="Advertisement 3" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad4.png" alt="Advertisement 4" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad4.png" alt="Advertisement 4" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad5.png" alt="Advertisement 5" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad5.png" alt="Advertisement 5" className="w-full h-full object-cover" />
+             </div>
 
-            <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
-              <img src="/ad6.png" alt="Advertisement 6" className="w-full h-full object-cover" />
-            </div>
+             <div className="w-full h-[212px] rounded-lg shadow-sm border border-gray-200 overflow-hidden bg-gray-100">
+               <img src="/ad6.png" alt="Advertisement 6" className="w-full h-full object-cover" />
+             </div>
 
           </aside>
 

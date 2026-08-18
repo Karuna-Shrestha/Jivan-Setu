@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar'; // Path milaunuhola
-import Footer from '../components/Footer'; // Path milaunuhola
+import { useNavigate } from 'react-router-dom'; 
+import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
+import Navbar from '../components/Navbar'; 
+import Footer from '../components/Footer'; 
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +14,8 @@ const Register = () => {
     password: ''
   });
 
+  const navigate = useNavigate(); // नेभिगेसनको लागि
+
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   const handleChange = (e) => {
@@ -20,9 +24,39 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log('Registering Donor:', formData);
-    alert('Registration Submitted successfully!');
-    // backend API calling logic 
+    
+    // १. LocalStorage बाट पुराना युजरहरूको लिस्ट तान्ने (नभए खाली Array)
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+
+    // २. इमेल पहिले नै छ कि चेक गर्ने
+    const isEmailExists = existingUsers.some(user => user.email === formData.email);
+    if (isEmailExists) {
+      // प्रिमियम Error पपअप
+      toast.error("यो इमेल पहिले नै रजिस्टर छ! कृपया अर्कै इमेल प्रयोग गर्नुहोस् वा लगिन गर्नुहोस्।");
+      return;
+    }
+
+    // ३. नयाँ युजरको डाटा तयार गर्ने (Navbar मा user.name चाहिने भएकाले fullName लाई name मा म्याप गरिएको)
+    const newUser = {
+      name: formData.fullName, 
+      email: formData.email,
+      phone: formData.phone,
+      bloodGroup: formData.bloodGroup,
+      location: formData.location,
+      password: formData.password
+    };
+
+    // ४. लिस्टमा नयाँ युजर थप्ने र LocalStorage मा सेभ गर्ने
+    existingUsers.push(newUser);
+    localStorage.setItem('users', JSON.stringify(existingUsers));
+
+    // प्रिमियम Success पपअप
+    toast.success('Registration successful! Please log in.');
+    
+    // पपअप हेर्न १.५ सेकेन्ड पर्खेर मात्र लगिन पेजमा जाने
+    setTimeout(() => {
+      navigate('/login'); 
+    }, 1500);
   };
 
   return (
@@ -128,7 +162,7 @@ const Register = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 uppercase tracking-wider"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 uppercase tracking-wider cursor-pointer"
                 >
                   Register as Donor
                 </button>

@@ -1,15 +1,42 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar'; // Tapai ko file structure anusaar path milaunuhola
-import Footer from '../components/Footer'; // Tapai ko file structure anusaar path milaunuhola
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
+import Navbar from '../components/Navbar'; 
+import Footer from '../components/Footer'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // नेभिगेट गर्नको लागि
 
   const handleLogin = (e) => {
     e.preventDefault();
-    alert(`Logging in with: ${email}`);
-    // backend API calling logic 
+    
+    // १. LocalStorage बाट रजिस्टर भएका सबै युजर तान्ने
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+
+    // २. इमेल र पासवर्ड मिल्ने युजर खोज्ने
+    const foundUser = existingUsers.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    if (foundUser) {
+      // ३. यदि मिल्यो भने 'currentUser' भनेर सेभ गर्ने
+      localStorage.setItem('currentUser', JSON.stringify(foundUser));
+      
+      // प्रिमियम Success पपअप देखाउने
+      toast.success(`Welcome back, ${foundUser.name}!`);
+      
+      // पपअप हेर्न १.२ सेकेन्ड पर्खेर मात्र होमपेजमा जाने र रिलोड गर्ने
+      setTimeout(() => {
+        navigate('/'); // होमपेजमा पठाउने
+        window.location.reload(); // Navbar अपडेट गर्न एकपटक रिलोड गर्ने
+      }, 1200);
+
+    } else {
+      // मिलेन भने प्रिमियम Error पपअप देखाउने
+      toast.error("Invalid Email or Password! कृपया सही विवरण राख्नुहोस्।");
+    }
   };
 
   return (
@@ -70,7 +97,7 @@ const Login = () => {
               <div>
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
                 >
                   Sign in
                 </button>

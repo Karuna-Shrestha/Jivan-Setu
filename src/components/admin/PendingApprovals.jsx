@@ -1,23 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-const PendingApprovals = ({ 
-  pendingBloodBanks, setPendingBloodBanks, 
-  pendingDonors, setPendingDonors, 
-  pendingUpdates, setPendingUpdates 
-}) => {
+const PendingApprovals = () => {
   const [approvalTab, setApprovalTab] = useState('blood-banks');
+  
+  // LocalStorage बाट तानिने स्टेटहरू
+  const [pendingBloodBanks, setPendingBloodBanks] = useState([]);
+  const [pendingDonors, setPendingDonors] = useState([]);
+  const [pendingUpdates, setPendingUpdates] = useState([]); // अहिलेको लागि खाली राख्न सकिन्छ
+
+  // कम्पोनेन्ट लोड हुँदा LocalStorage बाट Pending डाटाहरू तान्ने
+  useEffect(() => {
+    const fetchedBBs = JSON.parse(localStorage.getItem('pendingBloodBanks')) || [];
+    const fetchedDonors = JSON.parse(localStorage.getItem('pendingDonors')) || [];
+    
+    setPendingBloodBanks(fetchedBBs);
+    setPendingDonors(fetchedDonors);
+  }, []);
 
   const handleAction = (id, category, name, actionType) => {
     if (actionType === 'approve') {
-      toast.success(`${name} has been approved!`, { style: { background: '#10b981', color: '#fff', fontWeight: 'bold' } });
+      
+      if (category === 'blood-bank') {
+        // १. Pending बाट खोज्ने
+        const itemToApprove = pendingBloodBanks.find(item => item.id === id);
+        // २. Public Blood Banks मा थप्ने
+        const approvedBBs = JSON.parse(localStorage.getItem('bloodBanks')) || [];
+        approvedBBs.push({ ...itemToApprove, status: 'approved' });
+        localStorage.setItem('bloodBanks', JSON.stringify(approvedBBs));
+        
+        // ३. Pending बाट हटाउने
+        const newPending = pendingBloodBanks.filter(item => item.id !== id);
+        setPendingBloodBanks(newPending);
+        localStorage.setItem('pendingBloodBanks', JSON.stringify(newPending));
+      } 
+      else if (category === 'donor') {
+        // १. Pending बाट खोज्ने
+        const itemToApprove = pendingDonors.find(item => item.id === id);
+        // २. Public Donors मा थप्ने
+        const approvedDonors = JSON.parse(localStorage.getItem('donors')) || [];
+        approvedDonors.push({ ...itemToApprove, status: 'approved' });
+        localStorage.setItem('donors', JSON.stringify(approvedDonors));
+        
+        // ३. Pending बाट हटाउने
+        const newPending = pendingDonors.filter(item => item.id !== id);
+        setPendingDonors(newPending);
+        localStorage.setItem('pendingDonors', JSON.stringify(newPending));
+      }
+
+      toast.success(`${name} has been approved and published!`, { style: { background: '#10b981', color: '#fff', fontWeight: 'bold' } });
+    
     } else {
+      // Reject गर्दा सिधै Pending बाट डिलिट मात्र गर्ने
+      if (category === 'blood-bank') {
+        const newPending = pendingBloodBanks.filter(item => item.id !== id);
+        setPendingBloodBanks(newPending);
+        localStorage.setItem('pendingBloodBanks', JSON.stringify(newPending));
+      } else if (category === 'donor') {
+        const newPending = pendingDonors.filter(item => item.id !== id);
+        setPendingDonors(newPending);
+        localStorage.setItem('pendingDonors', JSON.stringify(newPending));
+      }
+      
       toast.error(`${name}'s request rejected.`, { style: { background: '#ef4444', color: '#fff', fontWeight: 'bold' } });
     }
-
-    if (category === 'blood-bank') setPendingBloodBanks(prev => prev.filter(item => item.id !== id));
-    else if (category === 'donor') setPendingDonors(prev => prev.filter(item => item.id !== id));
-    else if (category === 'update') setPendingUpdates(prev => prev.filter(item => item.id !== id));
   };
 
   return (
@@ -32,14 +78,31 @@ const PendingApprovals = ({
         {approvalTab === 'blood-banks' && (
           <div className="space-y-4">
             {pendingBloodBanks.length === 0 ? <EmptyState /> : pendingBloodBanks.map(item => (
-              <ApprovalCard key={item.id} title={item.name} subtitle={item.location} meta={`Contact: ${item.contact} • Requested: ${item.date}`} badge="New Facility" onApprove={() => handleAction(item.id, 'blood-bank', item.name, 'approve')} onReject={() => handleAction(item.id, 'blood-bank', item.name, 'reject')} />
+              <ApprovalCard 
+                key={item.id} 
+                title={item.name} 
+                subtitle={item.location} 
+                meta={`Contact: ${item.phone} • Requested By: ${item.requestedBy}`} 
+                badge="New Facility" 
+                onApprove={() => handleAction(item.id, 'blood-bank', item.name, 'approve')} 
+                onReject={() => handleAction(item.id, 'blood-bank', item.name, 'reject')} 
+              />
             ))}
           </div>
         )}
         {approvalTab === 'donors' && (
           <div className="space-y-4">
             {pendingDonors.length === 0 ? <EmptyState /> : pendingDonors.map(item => (
-              <ApprovalCard key={item.id} title={item.name} subtitle={item.location} meta={`Blood Group: ${item.bloodGroup} • Contact: ${item.contact} • Requested: ${item.date}`} badge="New Donor" badgeColor="bg-red-100 text-red-700" onApprove={() => handleAction(item.id, 'donor', item.name, 'approve')} onReject={() => handleAction(item.id, 'donor', item.name, 'reject')} />
+              <ApprovalCard 
+                key={item.id} 
+                title={item.name} 
+                subtitle={item.location} 
+                meta={`Blood Group: ${item.bloodGroup} • Contact: ${item.phone}`} 
+                badge="New Donor" 
+                badgeColor="bg-red-100 text-red-700" 
+                onApprove={() => handleAction(item.id, 'donor', item.name, 'approve')} 
+                onReject={() => handleAction(item.id, 'donor', item.name, 'reject')} 
+              />
             ))}
           </div>
         )}
