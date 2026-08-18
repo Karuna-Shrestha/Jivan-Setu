@@ -7,7 +7,7 @@ import {
   deleteDonor,
 } from "../controllers/donorController.js";
 
-import authMiddleware from "../middleware/authMiddleware.js";
+import authMiddleware from "./authMiddleware.js";
 
 const router = express.Router();
 
