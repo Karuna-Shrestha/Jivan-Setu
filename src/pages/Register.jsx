@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
+import toast from 'react-hot-toast'; // Imported for premium popups
 import Navbar from '../components/Navbar'; 
 import Footer from '../components/Footer'; 
 
@@ -14,7 +14,7 @@ const Register = () => {
     password: ''
   });
 
-  const navigate = useNavigate(); // नेभिगेसनको लागि
+  const navigate = useNavigate(); // Hook for navigation
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -25,38 +25,36 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
     
-    // १. LocalStorage बाट पुराना युजरहरूको लिस्ट तान्ने (नभए खाली Array)
-    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+    // TODO: Backend Developer - Send POST request to the registration API endpoint
+    /* Example:
+       // Map fullName to name if your backend expects 'name'
+       const payload = {
+         name: formData.fullName, 
+         email: formData.email,
+         phone: formData.phone,
+         bloodGroup: formData.bloodGroup,
+         location: formData.location,
+         password: formData.password
+       };
 
-    // २. इमेल पहिले नै छ कि चेक गर्ने
-    const isEmailExists = existingUsers.some(user => user.email === formData.email);
-    if (isEmailExists) {
-      // प्रिमियम Error पपअप
-      toast.error("यो इमेल पहिले नै रजिस्टर छ! कृपया अर्कै इमेल प्रयोग गर्नुहोस् वा लगिन गर्नुहोस्।");
-      return;
-    }
+       axios.post('/api/register', payload)
+         .then(res => {
+           toast.success('Registration successful! Please log in.');
+           setTimeout(() => {
+             navigate('/login'); 
+           }, 1500);
+         })
+         .catch(err => {
+           // Handle errors (e.g., Email already exists)
+           toast.error(err.response?.data?.message || "Email already exists or registration failed!");
+         });
+    */
 
-    // ३. नयाँ युजरको डाटा तयार गर्ने (Navbar मा user.name चाहिने भएकाले fullName लाई name मा म्याप गरिएको)
-    const newUser = {
-      name: formData.fullName, 
-      email: formData.email,
-      phone: formData.phone,
-      bloodGroup: formData.bloodGroup,
-      location: formData.location,
-      password: formData.password
-    };
-
-    // ४. लिस्टमा नयाँ युजर थप्ने र LocalStorage मा सेभ गर्ने
-    existingUsers.push(newUser);
-    localStorage.setItem('users', JSON.stringify(existingUsers));
-
-    // प्रिमियम Success पपअप
-    toast.success('Registration successful! Please log in.');
-    
-    // पपअप हेर्न १.५ सेकेन्ड पर्खेर मात्र लगिन पेजमा जाने
-    setTimeout(() => {
-      navigate('/login'); 
-    }, 1500);
+    // Temporary Frontend Update (Remove this block once API is integrated)
+    toast.success('Registration simulation (API Pending). Add backend logic to proceed!');
+    // setTimeout(() => {
+    //   navigate('/login'); 
+    // }, 1500);
   };
 
   return (

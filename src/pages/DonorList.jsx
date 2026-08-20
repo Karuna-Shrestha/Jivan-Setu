@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const DonorList = () => {
-  // डिफल्ट डोनरहरू (Default dummy blood donors)
+  // Default dummy blood donors
   const defaultDonors = [
     { id: 1, name: "Ram Karki", address: "Kathmandu", phone: "9841000001", bloodGroup: "O+" },
     { id: 2, name: "Hari Thapa", address: "Lalitpur", phone: "9851000002", bloodGroup: "A+" },
@@ -20,29 +20,27 @@ const DonorList = () => {
     { id: 12, name: "Karuna Shrestha", address: "Banepa", phone: "9861123456", bloodGroup: "O+" }
   ];
 
-  // donor state
+  // Donor state
   const [donors, setDonors] = useState(defaultDonors);
 
-  // पेज खुल्दा Admin ले Approve गरेका नयाँ डोनरहरू LocalStorage बाट तान्ने
+  // Fetch approved donors when the component mounts
   useEffect(() => {
-    const approvedDonors = JSON.parse(localStorage.getItem('donors')) || [];
-    
-    // UserDashboard मा location छ, यहाँ address छ, त्यसैले म्याप गरेर मिलाएको
-    const formattedApprovedDonors = approvedDonors.map(d => ({
-      id: d.id,
-      name: d.name,
-      address: d.location, // location लाई address मा बदल्ने
-      phone: d.phone,
-      bloodGroup: d.bloodGroup
-    }));
+    // TODO: Backend Developer - Send GET request to fetch verified donors from the database
+    /* Example:
+       axios.get('/api/donors')
+         .then(res => {
+           setDonors([...res.data, ...defaultDonors]);
+         })
+         .catch(err => console.error("Failed to fetch donors", err));
+    */
 
-    // नयाँ Approve भएकालाई माथि र पुरानालाई तल राखेर सेट गर्ने
-    setDonors([...formattedApprovedDonors, ...defaultDonors]);
+    // Temporary Frontend Mock
+    setDonors(defaultDonors);
   }, []);
 
   const location = useLocation();
 
-  // URL बाट group तान्ने फङ्गसन
+  // Extract blood group query parameter from URL
   const getInitialGroup = () => {
     const searchParams = new URLSearchParams(location.search);
     const group = searchParams.get('group');
@@ -50,13 +48,13 @@ const DonorList = () => {
     return validGroups.includes(group) ? group : 'All';
   };
 
-  // filter को लागि स्टेट
+  // State for filtering
   const [selectedGroup, setSelectedGroup] = useState(getInitialGroup());
 
-  // Blood group list
+  // Blood group options list
   const bloodGroups = ['All', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-  // Select गरेको blood group अनुसार डाटा फिल्टर गर्ने
+  // Filter donors based on the selected blood group
   const filteredDonors = selectedGroup === 'All' 
     ? donors 
     : donors.filter(donor => donor.bloodGroup === selectedGroup);
@@ -123,7 +121,7 @@ const DonorList = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                         {donor.name}
-                        {/* भर्खरै Approve भएको डोनर हो भने "New" ट्याग देखाउने */}
+                        {/* Show "New" badge for newly added donors */}
                         {donor.id > 100 && (
                           <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800">
                             New
@@ -131,10 +129,10 @@ const DonorList = () => {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                        {donor.address}
+                        {donor.address || donor.location}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                        {donor.phone}
+                        {donor.phone || donor.contact}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         <span className="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full bg-red-100 text-red-800 border border-red-200">
@@ -144,7 +142,7 @@ const DonorList = () => {
                     </tr>
                   ))
                 ) : (
-                  // यदि खोजेको ब्लड ग्रुप भेटिएन भने
+                  // Fallback when no donors match the selected blood group
                   <tr>
                     <td colSpan="5" className="px-6 py-10 text-center text-gray-500 font-medium">
                       Sorry, no donors found for <span className="font-bold text-red-600">{selectedGroup}</span> blood group.

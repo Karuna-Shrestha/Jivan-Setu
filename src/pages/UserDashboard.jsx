@@ -9,101 +9,139 @@ const UserDashboard = () => {
   
   const [user, setUser] = useState(null);
   
-  // Profile Edit Mode को लागि स्टेट
+  // State for Profile Edit Mode 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
 
-  // Request Forms को लागि स्टेट
+  // State for Request Forms
   const [showBloodBankForm, setShowBloodBankForm] = useState(false);
-  const [bbFormData, setBbFormData] = useState({ name: '', location: '', phone: '' });
+  const [bbFormData, setBbFormData] = useState({ name: '', location: '', phone: '', imageFile: null });
 
   const [showDonorForm, setShowDonorForm] = useState(false);
   const [donorFormData, setDonorFormData] = useState({ name: '', bloodGroup: '', location: '', phone: '' });
 
-  // पेज खुल्नेबित्तिकै युजर लगिन छ कि छैन चेक गर्ने
+  // Check whether the user is logged in as soon as the page opens
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-      toast.error("Please login to access your dashboard.");
-      navigate('/login');
-    } else {
-      setUser(currentUser);
-      setFormData(currentUser); 
-      // डोनर फर्मको लागि सुरुमै युजरको आफ्नै डाटा राखिदिने
-      setDonorFormData({
-        name: currentUser.name,
-        bloodGroup: currentUser.bloodGroup,
-        location: currentUser.location,
-        phone: currentUser.phone
-      });
-    }
+    // TODO: Backend Developer - Fetch currently logged-in user profile from the database
+    /* Example:
+       axios.get('/api/users/profile')
+         .then(res => {
+           const currentUser = res.data.user;
+           setUser(currentUser);
+           setFormData(currentUser);
+           setDonorFormData({
+             name: currentUser.name,
+             bloodGroup: currentUser.bloodGroup,
+             location: currentUser.location,
+             phone: currentUser.phone
+           });
+         })
+         .catch(err => {
+           toast.error("Please login to access your dashboard.");
+           navigate('/login');
+         });
+    */
+
+    // Temporary Frontend Mock (Remove this block once API is integrated)
+    const mockUser = {
+      name: 'Guest Donor',
+      email: 'guest@jivansetu.com',
+      phone: '9800000000',
+      location: 'Kathmandu',
+      bloodGroup: 'A+'
+    };
+    setUser(mockUser);
+    setFormData(mockUser);
+    setDonorFormData({
+      name: mockUser.name,
+      bloodGroup: mockUser.bloodGroup,
+      location: mockUser.location,
+      phone: mockUser.phone
+    });
   }, [navigate]);
 
-  // Profile Edit ह्यान्डल गर्ने
+  // Profile Edit handle
   const handleProfileChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
-    localStorage.setItem('currentUser', JSON.stringify(formData));
-    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
-    const updatedUsers = existingUsers.map(u => 
-      u.email === user.email ? { ...u, ...formData } : u
-    );
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
+    
+    // TODO: Backend Developer - Send PUT/PATCH request to update the user's profile
+    /* Example:
+       axios.put('/api/users/profile', formData)
+         .then(res => {
+           setUser(res.data.user);
+           setIsEditing(false); 
+           toast.success("Profile updated successfully!");
+         })
+         .catch(err => {
+           toast.error(err.response?.data?.message || "Failed to update profile.");
+         });
+    */
 
+    // Temporary Frontend Update (Remove this block once API is integrated)
     setUser(formData);
     setIsEditing(false); 
-    toast.success("Profile updated successfully!");
-
-    if (user.name !== formData.name) {
-      setTimeout(() => window.location.reload(), 1000);
-    }
+    toast.success("Profile update simulation (API Pending).");
   };
 
   // --- ADMIN APPROVAL LOGICS ---
 
-  // Blood Bank Request पठाउने
+  // Blood Bank Request
   const handleBloodBankSubmit = (e) => {
     e.preventDefault();
-    const pendingBBs = JSON.parse(localStorage.getItem('pendingBloodBanks')) || [];
     
-    const newRequest = {
-      id: Date.now(), // युनिक ID
-      requestedBy: user.email,
-      ...bbFormData,
-      status: 'pending'
-    };
+    // TODO: Backend Developer - Send POST request with FormData for image upload
+    /* Example:
+       const formDataToSend = new FormData();
+       formDataToSend.append('name', bbFormData.name);
+       formDataToSend.append('location', bbFormData.location);
+       formDataToSend.append('phone', bbFormData.phone);
+       if(bbFormData.imageFile) {
+         formDataToSend.append('image', bbFormData.imageFile);
+       }
+       
+       axios.post('/api/bloodbanks/request', formDataToSend)
+         .then(res => {
+           toast.success("Blood Bank addition request sent! Pending Admin Approval.");
+           setShowBloodBankForm(false);
+           setBbFormData({ name: '', location: '', phone: '', imageFile: null });
+         })
+         .catch(err => {
+           toast.error("Failed to send blood bank request.");
+         });
+    */
 
-    pendingBBs.push(newRequest);
-    localStorage.setItem('pendingBloodBanks', JSON.stringify(pendingBBs));
-    
-    toast.success("Blood Bank addition request sent! Pending Admin Approval.");
+    // Temporary Frontend Update (Remove this block once API is integrated)
+    toast.success("Blood Bank request simulation (API Pending).");
     setShowBloodBankForm(false);
-    setBbFormData({ name: '', location: '', phone: '' }); // फर्म रिसेट गर्ने
+    setBbFormData({ name: '', location: '', phone: '', imageFile: null }); 
   };
 
-  // Donor List Request पठाउने (Add / Edit)
+  // Donor List Request (Add / Edit)
   const handleDonorSubmit = (e) => {
     e.preventDefault();
-    const pendingDonors = JSON.parse(localStorage.getItem('pendingDonors')) || [];
     
-    const newRequest = {
-      id: Date.now(),
-      requestedBy: user.email, // कुन युजरले पठाएको भनेर ट्र्याक गर्न
-      ...donorFormData,
-      status: 'pending'
-    };
+    // TODO: Backend Developer - Send POST request to request public donor listing
+    /* Example:
+       axios.post('/api/donors/request', donorFormData)
+         .then(res => {
+           toast.success("Public Donor List update request sent! Pending Admin Approval.");
+           setShowDonorForm(false);
+         })
+         .catch(err => {
+           toast.error("Failed to send donor listing request.");
+         });
+    */
 
-    pendingDonors.push(newRequest);
-    localStorage.setItem('pendingDonors', JSON.stringify(pendingDonors));
-    
-    toast.success("Public Donor List update request sent! Pending Admin Approval.");
+    // Temporary Frontend Update (Remove this block once API is integrated)
+    toast.success("Public Donor request simulation (API Pending).");
     setShowDonorForm(false);
   };
 
-  // जबसम्म युजर डाटा लोड हुँदैन, तबसम्म खाली देखाउने
+  // Display blank until user data is loaded
   if (!user) return null; 
 
   return (
@@ -118,7 +156,7 @@ const UserDashboard = () => {
             <span className="bg-red-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3 inline-block">
               Donor Dashboard
             </span>
-            <h2 className="text-3xl font-extrabold mb-2">Hello, {user.name} 👋</h2>
+            <h2 className="text-3xl font-extrabold mb-2">Welcome, {user.name} </h2>
             <p className="text-blue-100 text-sm">
               Thank you for being a part of Jivan Setu. Your blood group <strong className="text-white text-lg bg-red-600 px-2 py-0.5 rounded ml-1">{user.bloodGroup}</strong> can save lives!
             </p>
@@ -184,21 +222,21 @@ const UserDashboard = () => {
               </div>
             </div>
 
-            {/* Contributions & Requests (NEW SECTION) */}
+            {/* Contributions & Requests */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
               <h3 className="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Contribute & Requests</h3>
               <div className="flex flex-col md:flex-row gap-4 mb-4">
                 <button 
                   onClick={() => { setShowBloodBankForm(!showBloodBankForm); setShowDonorForm(false); }}
-                  className="flex-1 py-3 bg-red-50 text-red-700 font-bold rounded-lg border border-red-200 hover:bg-red-100 transition flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-red-50 text-red-700 font-bold rounded-lg border border-red-200 hover:bg-red-100 transition flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span>🏥</span> Add Blood Bank
+                  Add Blood Bank
                 </button>
                 <button 
                   onClick={() => { setShowDonorForm(!showDonorForm); setShowBloodBankForm(false); }}
-                  className="flex-1 py-3 bg-blue-50 text-blue-700 font-bold rounded-lg border border-blue-200 hover:bg-blue-100 transition flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-blue-50 text-blue-700 font-bold rounded-lg border border-blue-200 hover:bg-blue-100 transition flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <span>📝</span> List / Update as Public Donor
+                  Be a Public Donor
                 </button>
               </div>
 
@@ -219,8 +257,22 @@ const UserDashboard = () => {
                       <label className="block text-gray-600 mb-1">Full Address</label>
                       <input type="text" required value={bbFormData.location} onChange={(e) => setBbFormData({...bbFormData, location: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded" placeholder="e.g. Exhibition Road, Kathmandu" />
                     </div>
+                    
+                    <div className="md:col-span-2">
+                      <label className="block text-gray-600 mb-1">Upload Center Photo (Optional)</label>
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setBbFormData({ ...bbFormData, imageFile: e.target.files[0] });
+                          }
+                        }}
+                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" 
+                      />
+                    </div>
                   </div>
-                  <button type="submit" className="px-4 py-2 bg-green-600 text-white font-bold rounded text-sm hover:bg-green-700">Submit for Approval</button>
+                  <button type="submit" className="px-4 py-2 bg-green-600 text-white font-bold rounded text-sm hover:bg-green-700 cursor-pointer">Submit for Approval</button>
                 </form>
               )}
 
@@ -250,7 +302,7 @@ const UserDashboard = () => {
                       <input type="text" required value={donorFormData.location} onChange={(e) => setDonorFormData({...donorFormData, location: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded" />
                     </div>
                   </div>
-                  <button type="submit" className="px-4 py-2 bg-green-600 text-white font-bold rounded text-sm hover:bg-green-700">Submit for Approval</button>
+                  <button type="submit" className="px-4 py-2 bg-green-600 text-white font-bold rounded text-sm hover:bg-green-700 cursor-pointer">Submit for Approval</button>
                 </form>
               )}
 

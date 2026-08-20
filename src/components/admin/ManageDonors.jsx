@@ -1,26 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const ManageDonors = () => {
-  // Dummy Data for Donors
-  const [donors, setDonors] = useState([
-    { id: 1, name: 'Aayush Shrestha', bloodGroup: 'A+', location: 'Dharan, Koshi', contact: '9811111111', lastDonated: '3 months ago' },
-    { id: 2, name: 'Pooja Karki', bloodGroup: 'B+', location: 'Biratnagar, Koshi', contact: '9822222222', lastDonated: '1 month ago' },
-    { id: 3, name: 'Bibek Gautam', bloodGroup: 'O-', location: 'Kathmandu, Bagmati', contact: '9833333333', lastDonated: 'Never' },
-  ]);
+  const [donors, setDonors] = useState([]);
 
-  // Delete Donor
+  // TODO: Backend Developer - Fetch donors from the database when component mounts
+  useEffect(() => {
+    // Example: 
+    // axios.get('/api/donors').then(res => setDonors(res.data));
+  }, []);
+
   const handleDelete = (id, name) => {
-    if (window.confirm(`Are you sure you want to remove donor ${name}?`)) {
-      setDonors(prev => prev.filter(item => item.id !== id));
-      toast.error(`Donor ${name} removed.`);
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-red-500 text-xl">⚠️</span>
+          <p className="text-sm font-bold text-gray-800">
+            Remove donor <span className="text-red-600">{name}</span>?
+          </p>
+        </div>
+        <p className="text-xs text-gray-500">This action cannot be undone.</p>
+        <div className="flex gap-2 justify-end mt-2">
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-md transition cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              confirmDeletion(id, name);
+            }}
+            className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-md transition shadow-sm cursor-pointer"
+          >
+            Yes, Remove
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+      position: 'top-center',
+      style: { border: '1px solid #fee2e2', padding: '16px', borderRadius: '12px' }
+    });
+  };
+
+  const confirmDeletion = (id, name) => {
+    // TODO: Backend Developer - Send DELETE request to the API
+    /* Example:
+       axios.delete(`/api/donors/${id}`).then(() => {
+         setDonors(donors.filter(item => item.id !== id));
+         toast.success(`Donor ${name} removed successfully.`);
+       });
+    */
+
+    // Temporary Frontend Update (Remove this once API is integrated)
+    setDonors(donors.filter(item => item.id !== id));
+    toast.success(`Donor ${name} removed locally (API pending).`, {
+      style: { background: '#fee2e2', color: '#b91c1c', fontWeight: 'bold', border: '1px solid #f87171' },
+      iconTheme: { primary: '#dc2626', secondary: '#fff' },
+    });
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 animate-fadeIn">
-      
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-xl font-extrabold text-gray-800">Manage Registered Donors</h3>
@@ -31,7 +74,6 @@ const ManageDonors = () => {
         </div>
       </div>
 
-      {/* Donors Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -46,30 +88,17 @@ const ManageDonors = () => {
           </thead>
           <tbody className="divide-y divide-gray-100 text-sm">
             {donors.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="text-center py-8 text-gray-500 font-medium">No donors found.</td>
-              </tr>
+              <tr><td colSpan="6" className="text-center py-8 text-gray-500 font-medium">No donors found.</td></tr>
             ) : (
               donors.map(donor => (
                 <tr key={donor.id} className="hover:bg-gray-50 transition">
-                  <td className="py-4 px-4 font-bold text-gray-800 flex items-center gap-2">
-                    <span>👤</span> {donor.name}
-                  </td>
-                  <td className="py-4 px-4">
-                    <span className="bg-red-100 text-red-700 font-extrabold text-xs px-2.5 py-1 rounded-full">
-                      {donor.bloodGroup}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4 text-gray-600">{donor.location}</td>
-                  <td className="py-4 px-4 text-gray-600 font-medium">{donor.contact}</td>
-                  <td className="py-4 px-4 text-gray-500 text-xs font-semibold">{donor.lastDonated}</td>
+                  <td className="py-4 px-4 font-bold text-gray-800 flex items-center gap-2"><span>👤</span> {donor.name}</td>
+                  <td className="py-4 px-4"><span className="bg-red-100 text-red-700 font-extrabold text-xs px-2.5 py-1 rounded-full">{donor.bloodGroup}</span></td>
+                  <td className="py-4 px-4 text-gray-600">{donor.location || donor.address}</td>
+                  <td className="py-4 px-4 text-gray-600 font-medium">{donor.contact || donor.phone}</td>
+                  <td className="py-4 px-4 text-gray-500 text-xs font-semibold">{donor.lastDonated || 'N/A'}</td>
                   <td className="py-4 px-4 text-center">
-                    <button 
-                      onClick={() => handleDelete(donor.id, donor.name)}
-                      className="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer text-xs"
-                    >
-                      Remove
-                    </button>
+                    <button onClick={() => handleDelete(donor.id, donor.name)} className="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-3 py-1.5 rounded-lg transition cursor-pointer text-xs">Remove</button>
                   </td>
                 </tr>
               ))
@@ -77,7 +106,6 @@ const ManageDonors = () => {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 };

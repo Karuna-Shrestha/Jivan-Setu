@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast'; // Imported for premium popups
 
 const EmergencyModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,29 @@ const EmergencyModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Emergency blood request submitted successfully! Nearby donors & admins have been notified.');
+
+    // TODO: Backend Developer - Send POST request to the emergency request API endpoint
+    /* Example:
+       axios.post('/api/emergency-requests', formData)
+         .then(res => {
+           toast.success('Emergency blood request submitted successfully! Nearby donors & admins have been notified.', {
+             style: { background: '#ecfdf5', color: '#065f46', fontWeight: 'bold' }
+           });
+           setFormData({ contactPerson: '', phone: '', bloodGroup: 'O+', message: '' });
+           onClose();
+         })
+         .catch(err => {
+           toast.error(err.response?.data?.message || 'Failed to submit emergency request.');
+         });
+    */
+
+    // Temporary Frontend Update (Remove this block once API is integrated)
+    toast.success('Emergency request simulation (API Pending). Admins will be notified!', {
+      duration: 4000,
+      style: { background: '#ecfdf5', color: '#065f46', fontWeight: 'bold', border: '1px solid #34d399' },
+      iconTheme: { primary: '#10b981', secondary: '#fff' }
+    });
+    
     setFormData({ contactPerson: '', phone: '', bloodGroup: 'O+', message: '' });
     onClose();
   };

@@ -1,42 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
+import toast from 'react-hot-toast'; 
 import Navbar from '../components/Navbar'; 
 import Footer from '../components/Footer'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // नेभिगेट गर्नको लागि
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
     
-    // १. LocalStorage बाट रजिस्टर भएका सबै युजर तान्ने
-    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+    // TODO: Backend Developer - Send POST request to the login API endpoint
+    /* Example:
+       axios.post('/api/login', { email, password })
+         .then(res => {
+           // Save token or user details based on your auth strategy (e.g., Context API, Redux, or Secure Storage)
+           // localStorage.setItem('token', res.data.token);
+           // localStorage.setItem('currentUser', JSON.stringify(res.data.user)); 
+           
+           toast.success(`Welcome back, ${res.data.user.name}!`);
+           
+           setTimeout(() => {
+             navigate('/'); 
+             window.location.reload(); 
+           }, 1200);
+         })
+         .catch(err => {
+           toast.error(err.response?.data?.message || "Invalid Email or Password!");
+         });
+    */
 
-    // २. इमेल र पासवर्ड मिल्ने युजर खोज्ने
-    const foundUser = existingUsers.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (foundUser) {
-      // ३. यदि मिल्यो भने 'currentUser' भनेर सेभ गर्ने
-      localStorage.setItem('currentUser', JSON.stringify(foundUser));
-      
-      // प्रिमियम Success पपअप देखाउने
-      toast.success(`Welcome back, ${foundUser.name}!`);
-      
-      // पपअप हेर्न १.२ सेकेन्ड पर्खेर मात्र होमपेजमा जाने र रिलोड गर्ने
-      setTimeout(() => {
-        navigate('/'); // होमपेजमा पठाउने
-        window.location.reload(); // Navbar अपडेट गर्न एकपटक रिलोड गर्ने
-      }, 1200);
-
-    } else {
-      // मिलेन भने प्रिमियम Error पपअप देखाउने
-      toast.error("Invalid Email or Password! कृपया सही विवरण राख्नुहोस्।");
-    }
+    // Temporary Frontend Update (Remove this block once API is integrated)
+    toast.success('Login simulation (API Pending). Add backend logic to proceed!');
+    // setTimeout(() => {
+    //   navigate('/');
+    // }, 1200);
   };
 
   return (
