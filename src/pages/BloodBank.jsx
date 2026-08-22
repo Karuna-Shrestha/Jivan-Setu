@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
+import toast from 'react-hot-toast'; // Imported for premium popups
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import EmergencyModal from '../components/EmergencyModal';
@@ -10,11 +10,12 @@ const BloodBank = () => {
   // Emergency Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // इमर्जेन्सी बटन क्लिक गर्दा चल्ने सेकक्युरिटी फङ्गसन
+  // Security function that runs when you click the emergency button
   const handleEmergencyClick = () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // TODO: Backend Developer - Validate if the user is currently authenticated (via Context, Redux, or API session)
+    const isAuthenticated = true; // Temporary mock: Change this based on actual auth state
     
-    if (!currentUser) {
+    if (!isAuthenticated) {
       toast.error('You have to Login first to request blood!', {
         style: {
           background: '#fee2e2',
@@ -69,10 +70,19 @@ const BloodBank = () => {
 
   const [banks, setBanks] = useState(defaultBanks);
 
-  // When the page opens, new Blood Banks approved by the Admin will be pulled
+  // Fetch approved blood banks from the database when component mounts
   useEffect(() => {
-    const approvedBBs = JSON.parse(localStorage.getItem('bloodBanks')) || [];
-    setBanks([...approvedBBs, ...defaultBanks]);
+    // TODO: Backend Developer - Send GET request to fetch approved blood banks
+    /* Example:
+       axios.get('/api/bloodbanks')
+         .then(res => {
+           setBanks([...res.data, ...defaultBanks]);
+         })
+         .catch(err => console.error("Failed to fetch blood banks", err));
+    */
+    
+    // Temporary Frontend Mock
+    setBanks(defaultBanks);
   }, []);
 
   // Form state for adding a new blood bank
@@ -87,9 +97,11 @@ const BloodBank = () => {
   });
 
   const handleToggleForm = () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser && !showForm) {
-      toast.error("You have to login first to add Blood Bank!");
+    // TODO: Backend Developer - Validate user authentication here
+    const isAuthenticated = true; // Temporary mock
+
+    if (!isAuthenticated && !showForm) {
+      toast.error("You have to login first to add a Blood Bank!");
       navigate('/login');
       return;
     }
@@ -106,43 +118,42 @@ const BloodBank = () => {
     }
   };
 
-  // Send to Pending List for Approval
+  // Submit Blood Bank Request for Admin Approval
   const handleAddBank = (e) => {
     e.preventDefault();
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     if (!newBank.name || !newBank.location || !newBank.contact) {
       toast.error("Please fill in at least Name, Location, and Contact!");
       return;
     }
 
-    let imagePath = "";
-    if (newBank.imageFile) {
-      imagePath = URL.createObjectURL(newBank.imageFile);
-    }
+    // TODO: Backend Developer - Send POST request with FormData for image upload
+    /* Example:
+       const formDataToSend = new FormData();
+       formDataToSend.append('name', newBank.name);
+       formDataToSend.append('location', newBank.location);
+       formDataToSend.append('contact', newBank.contact);
+       formDataToSend.append('email', newBank.email);
+       formDataToSend.append('website', newBank.website);
+       if (newBank.imageFile) {
+         formDataToSend.append('image', newBank.imageFile);
+       }
+       
+       axios.post('/api/bloodbanks/request', formDataToSend)
+         .then(res => {
+           toast.success("Request submitted successfully! It will appear here once Admin approves it.", { duration: 4000 });
+           setNewBank({ name: '', location: '', contact: '', email: '', website: '', imageFile: null });
+           setShowForm(false);
+         })
+         .catch(err => {
+           toast.error(err.response?.data?.message || "Failed to submit request.");
+         });
+    */
 
-    const bankRequest = {
-      id: Date.now(), 
-      name: newBank.name,
-      location: newBank.location,
-      contact: newBank.contact,
-      phone: newBank.contact, // To match phone and contact in the admin panel
-      email: newBank.email,
-      website: newBank.website,
-      image: imagePath,
-      requestedBy: currentUser.email,
-      status: 'pending'
-    };
-
-    // Add to Pending List
-    const pendingBBs = JSON.parse(localStorage.getItem('pendingBloodBanks')) || [];
-    pendingBBs.push(bankRequest);
-    localStorage.setItem('pendingBloodBanks', JSON.stringify(pendingBBs));
-
+    // Temporary Frontend Update (Remove this block once API is integrated)
+    toast.success("Blood Bank request simulation (API Pending). Admin will review it.", { duration: 4000 });
     setNewBank({ name: '', location: '', contact: '', email: '', website: '', imageFile: null });
     setShowForm(false);
-    
-    toast.success("Request submitted successfully! It will appear here once Admin approves it.", { duration: 4000 });
   };
 
   return (
@@ -245,7 +256,7 @@ const BloodBank = () => {
                       type="file" 
                       accept="image/*"
                       onChange={handleFileChange}
-                      className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                     />
                   </div>
                   <button 
@@ -263,14 +274,6 @@ const BloodBank = () => {
               {banks.map((bank) => (
                 <div key={bank.id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition flex flex-col sm:flex-row gap-4 items-center sm:items-start relative">
                   
-                  {/* Approved Badge (यदि यो नयाँ थपिएको हो भने देखाउन) */}
-                  {bank.status === 'approved' && (
-                    <span className="absolute top-2 right-2 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-md">
-                      Verified
-                    </span>
-                  )}
-
-                  {/* Center Image Box */}
                   <div className="w-full sm:w-36 h-28 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden border border-gray-200 flex items-center justify-center">
                     {bank.image ? (
                       <img 

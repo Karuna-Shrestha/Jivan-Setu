@@ -1,68 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
+// NOTE: If you are passing state from AdminDashboard as props, you can replace the local state below with props:
+// const PendingApprovals = ({ pendingBloodBanks, setPendingBloodBanks, pendingDonors, setPendingDonors, pendingUpdates, setPendingUpdates }) => {
 const PendingApprovals = () => {
   const [approvalTab, setApprovalTab] = useState('blood-banks');
   
-  // LocalStorage बाट तानिने स्टेटहरू
+  // Local state for pending items
   const [pendingBloodBanks, setPendingBloodBanks] = useState([]);
   const [pendingDonors, setPendingDonors] = useState([]);
-  const [pendingUpdates, setPendingUpdates] = useState([]); // अहिलेको लागि खाली राख्न सकिन्छ
+  const [pendingUpdates, setPendingUpdates] = useState([]); 
 
-  // कम्पोनेन्ट लोड हुँदा LocalStorage बाट Pending डाटाहरू तान्ने
+  // Fetch pending data when the component mounts
   useEffect(() => {
-    const fetchedBBs = JSON.parse(localStorage.getItem('pendingBloodBanks')) || [];
-    const fetchedDonors = JSON.parse(localStorage.getItem('pendingDonors')) || [];
-    
-    setPendingBloodBanks(fetchedBBs);
-    setPendingDonors(fetchedDonors);
+    // TODO: Backend Developer - Fetch pending requests from the database
+    /* Example:
+       Promise.all([
+         axios.get('/api/admin/pending/blood-banks'),
+         axios.get('/api/admin/pending/donors')
+       ]).then(([bbRes, donorsRes]) => {
+         setPendingBloodBanks(bbRes.data);
+         setPendingDonors(donorsRes.data);
+       }).catch(err => console.error(err));
+    */
+
+    // Temporary Frontend Mock (Remove this once API is integrated)
+    setPendingBloodBanks([]);
+    setPendingDonors([]);
+    setPendingUpdates([]);
   }, []);
 
   const handleAction = (id, category, name, actionType) => {
     if (actionType === 'approve') {
       
+      // TODO: Backend Developer - Send POST/PUT request to approve the item
+      /* Example:
+         axios.put(`/api/admin/approve/${category}/${id}`)
+           .then(() => {
+             toast.success(`${name} has been approved and published!`);
+             // Remove item from local pending state
+             if (category === 'blood-bank') setPendingBloodBanks(prev => prev.filter(item => item.id !== id));
+             if (category === 'donor') setPendingDonors(prev => prev.filter(item => item.id !== id));
+             if (category === 'update') setPendingUpdates(prev => prev.filter(item => item.id !== id));
+           })
+           .catch(err => toast.error("Approval failed."));
+      */
+
+      // Temporary Frontend Simulation (Remove once API is integrated)
       if (category === 'blood-bank') {
-        // १. Pending बाट खोज्ने
-        const itemToApprove = pendingBloodBanks.find(item => item.id === id);
-        // २. Public Blood Banks मा थप्ने
-        const approvedBBs = JSON.parse(localStorage.getItem('bloodBanks')) || [];
-        approvedBBs.push({ ...itemToApprove, status: 'approved' });
-        localStorage.setItem('bloodBanks', JSON.stringify(approvedBBs));
-        
-        // ३. Pending बाट हटाउने
-        const newPending = pendingBloodBanks.filter(item => item.id !== id);
-        setPendingBloodBanks(newPending);
-        localStorage.setItem('pendingBloodBanks', JSON.stringify(newPending));
-      } 
-      else if (category === 'donor') {
-        // १. Pending बाट खोज्ने
-        const itemToApprove = pendingDonors.find(item => item.id === id);
-        // २. Public Donors मा थप्ने
-        const approvedDonors = JSON.parse(localStorage.getItem('donors')) || [];
-        approvedDonors.push({ ...itemToApprove, status: 'approved' });
-        localStorage.setItem('donors', JSON.stringify(approvedDonors));
-        
-        // ३. Pending बाट हटाउने
-        const newPending = pendingDonors.filter(item => item.id !== id);
-        setPendingDonors(newPending);
-        localStorage.setItem('pendingDonors', JSON.stringify(newPending));
+        setPendingBloodBanks(prev => prev.filter(item => item.id !== id));
+      } else if (category === 'donor') {
+        setPendingDonors(prev => prev.filter(item => item.id !== id));
+      } else if (category === 'update') {
+        setPendingUpdates(prev => prev.filter(item => item.id !== id));
       }
 
-      toast.success(`${name} has been approved and published!`, { style: { background: '#10b981', color: '#fff', fontWeight: 'bold' } });
+      toast.success(`${name} approved (API Pending)!`, { style: { background: '#10b981', color: '#fff', fontWeight: 'bold' } });
     
     } else {
-      // Reject गर्दा सिधै Pending बाट डिलिट मात्र गर्ने
+      
+      // TODO: Backend Developer - Send DELETE/PUT request to reject the item
+      /* Example:
+         axios.delete(`/api/admin/reject/${category}/${id}`)
+           .then(() => {
+             toast.error(`${name}'s request rejected.`);
+             // Remove item from local pending state
+             if (category === 'blood-bank') setPendingBloodBanks(prev => prev.filter(item => item.id !== id));
+             if (category === 'donor') setPendingDonors(prev => prev.filter(item => item.id !== id));
+             if (category === 'update') setPendingUpdates(prev => prev.filter(item => item.id !== id));
+           })
+           .catch(err => toast.error("Rejection failed."));
+      */
+
+      // Temporary Frontend Simulation (Remove once API is integrated)
       if (category === 'blood-bank') {
-        const newPending = pendingBloodBanks.filter(item => item.id !== id);
-        setPendingBloodBanks(newPending);
-        localStorage.setItem('pendingBloodBanks', JSON.stringify(newPending));
+        setPendingBloodBanks(prev => prev.filter(item => item.id !== id));
       } else if (category === 'donor') {
-        const newPending = pendingDonors.filter(item => item.id !== id);
-        setPendingDonors(newPending);
-        localStorage.setItem('pendingDonors', JSON.stringify(newPending));
+        setPendingDonors(prev => prev.filter(item => item.id !== id));
+      } else if (category === 'update') {
+        setPendingUpdates(prev => prev.filter(item => item.id !== id));
       }
       
-      toast.error(`${name}'s request rejected.`, { style: { background: '#ef4444', color: '#fff', fontWeight: 'bold' } });
+      toast.error(`${name}'s request rejected (API Pending).`, { style: { background: '#ef4444', color: '#fff', fontWeight: 'bold' } });
     }
   };
 
@@ -109,7 +128,22 @@ const PendingApprovals = () => {
         {approvalTab === 'updates' && (
           <div className="space-y-4">
             {pendingUpdates.length === 0 ? <EmptyState /> : pendingUpdates.map(item => (
-              <ApprovalCard key={item.id} title={item.name} subtitle={<span className="flex items-center gap-2 mt-1"><span className="line-through text-red-400">{item.oldData}</span><span className="text-gray-400">➔</span><span className="text-green-600 font-bold">{item.newData}</span></span>} meta={`Type: ${item.type} • Requested: ${item.date}`} badge="Update Request" badgeColor="bg-yellow-100 text-yellow-700" onApprove={() => handleAction(item.id, 'update', item.name, 'approve')} onReject={() => handleAction(item.id, 'update', item.name, 'reject')} />
+              <ApprovalCard 
+                key={item.id} 
+                title={item.name} 
+                subtitle={
+                  <span className="flex items-center gap-2 mt-1">
+                    <span className="line-through text-red-400">{item.oldData}</span>
+                    <span className="text-gray-400">➔</span>
+                    <span className="text-green-600 font-bold">{item.newData}</span>
+                  </span>
+                } 
+                meta={`Type: ${item.type} • Requested: ${item.date}`} 
+                badge="Update Request" 
+                badgeColor="bg-yellow-100 text-yellow-700" 
+                onApprove={() => handleAction(item.id, 'update', item.name, 'approve')} 
+                onReject={() => handleAction(item.id, 'update', item.name, 'reject')} 
+              />
             ))}
           </div>
         )}
@@ -118,23 +152,42 @@ const PendingApprovals = () => {
   );
 };
 
+// Sub-components
 const EmptyState = () => (
-  <div className="text-center py-12"><span className="text-4xl block mb-3 opacity-50">✨</span><p className="text-gray-500 font-bold">All caught up! No pending requests here.</p></div>
+  <div className="text-center py-12">
+    <span className="text-4xl block mb-3 opacity-50">✨</span>
+    <p className="text-gray-500 font-bold">All caught up! No pending requests here.</p>
+  </div>
 );
 
 const SubTab = ({ label, active, onClick }) => (
-  <button onClick={onClick} className={`pb-3 px-2 font-bold text-sm transition-all duration-200 border-b-4 outline-none cursor-pointer ${active ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-500 hover:text-blue-500'}`}>{label}</button>
+  <button 
+    onClick={onClick} 
+    className={`pb-3 px-2 font-bold text-sm transition-all duration-200 border-b-4 outline-none cursor-pointer ${
+      active ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-500 hover:text-blue-500'
+    }`}
+  >
+    {label}
+  </button>
 );
 
 const ApprovalCard = ({ title, subtitle, meta, badge, badgeColor = "bg-blue-100 text-blue-700", onApprove, onReject }) => (
   <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-5 rounded-xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-md transition-all duration-300 gap-4">
     <div className="flex-1">
-      <div className="flex items-center gap-3 mb-1"><h4 className="text-lg font-extrabold text-gray-800">{title}</h4><span className={`text-xs font-bold px-2.5 py-1 rounded-full ${badgeColor}`}>{badge}</span></div>
-      <div className="text-sm text-gray-700 font-medium">{subtitle}</div><p className="text-xs text-gray-500 mt-2 font-semibold tracking-wide">{meta}</p>
+      <div className="flex items-center gap-3 mb-1">
+        <h4 className="text-lg font-extrabold text-gray-800">{title}</h4>
+        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${badgeColor}`}>{badge}</span>
+      </div>
+      <div className="text-sm text-gray-700 font-medium">{subtitle}</div>
+      <p className="text-xs text-gray-500 mt-2 font-semibold tracking-wide">{meta}</p>
     </div>
     <div className="flex items-center gap-3 w-full md:w-auto">
-      <button onClick={onReject} className="px-4 py-2 rounded-lg border-2 border-red-100 text-red-600 font-bold hover:bg-red-50 transition cursor-pointer">Reject</button>
-      <button onClick={onApprove} className="px-4 py-2 rounded-lg bg-green-500 text-white font-bold hover:bg-green-600 shadow-sm transition cursor-pointer">Approve</button>
+      <button onClick={onReject} className="px-4 py-2 rounded-lg border-2 border-red-100 text-red-600 font-bold hover:bg-red-50 transition cursor-pointer">
+        Reject
+      </button>
+      <button onClick={onApprove} className="px-4 py-2 rounded-lg bg-green-500 text-white font-bold hover:bg-green-600 shadow-sm transition cursor-pointer">
+        Approve
+      </button>
     </div>
   </div>
 );

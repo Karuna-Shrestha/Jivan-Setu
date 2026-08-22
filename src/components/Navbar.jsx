@@ -1,32 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast'; // प्रिमियम पपअपको लागि इम्पोर्ट गरियो
+import toast from 'react-hot-toast'; // Imported for premium popups
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // १. LocalStorage बाट लगिन भएको युजर तान्ने
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  
-  // २. यदि currentUser छ भने isLoggedIn true हुन्छ
+  // TODO: Backend Developer - Fetch the currently authenticated user (Session/Token check)
+  useEffect(() => {
+    /* Example:
+       axios.get('/api/auth/me')
+         .then(res => {
+           setCurrentUser(res.data.user);
+         })
+         .catch(err => {
+           setCurrentUser(null); // Not logged in
+         });
+    */
+
+    // Temporary Frontend Mock (Remove this once API is integrated or use Global State/Context)
+    // setCurrentUser({ name: 'Guest User' }); 
+  }, []);
+
   const isLoggedIn = !!currentUser; 
   const userName = currentUser ? currentUser.name : "";
 
-  // ३. Logout फङ्गसन
   const handleLogout = () => {
-    localStorage.removeItem('currentUser'); // लगआउट गर्दा युजरको डाटा हटाउने
+    // TODO: Backend Developer - Send POST request to logout API endpoint to clear session/cookies
+    /* Example:
+       axios.post('/api/logout')
+         .then(() => {
+           setCurrentUser(null);
+           setShowDropdown(false);
+           toast.success('Logged out successfully!');
+           setTimeout(() => {
+             navigate('/login'); 
+             window.location.reload(); 
+           }, 1200);
+         })
+         .catch(err => toast.error('Logout failed!'));
+    */
+
+    // Temporary Frontend Update (Remove this block once API is integrated)
     setShowDropdown(false);
-    
-    // प्रिमियम Success पपअप देखाउने
-    toast.success('Logged out successfully!');
-    
-    // पपअप हेर्न १.२ सेकेन्ड पर्खेर मात्र लगिन पेजमा जाने र रिलोड गर्ने
-    setTimeout(() => {
-      navigate('/login'); // लगिन पेजमा पठाउने
-      window.location.reload(); // Navbar अपडेट गर्न पेज रिफ्रेस गर्ने
-    }, 1200);
+    toast.success('Logout simulation (API Pending). Add backend logic to proceed!');
+    // setCurrentUser(null);
+    // setTimeout(() => navigate('/login'), 1200);
   };
 
   return (
@@ -121,14 +142,14 @@ const Navbar = () => {
   );
 };
 
-// Reusable component: active 'bg-blue-800' class 
+// Reusable component: active menu item style mapping
 const NavItem = ({ label, active, href }) => {
   return (
     <a 
       href={href || "#"} 
       className={`px-4 py-2 text-lg font-medium rounded-md transition-all duration-200 ${
         active 
-          ? 'bg-blue-800 text-white shadow-inner' // Active menu style
+          ? 'bg-blue-800 text-white shadow-inner' 
           : 'text-white hover:bg-blue-700 hover:text-gray-100'
       }`}
     >

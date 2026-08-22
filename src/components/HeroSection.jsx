@@ -27,10 +27,12 @@ const HeroSection = () => {
     }
   };
 
-  // लगिन चेक गर्ने नयाँ फङ्गसन
+  // Function to check authentication before allowing the user to become a donor
   const handleBecomeDonorClick = () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
+    // TODO: Backend Developer - Validate if the user is currently authenticated (via Context, Redux, or API session)
+    const isAuthenticated = true; // Temporary mock: Change this based on actual auth state
+
+    if (!isAuthenticated) {
       toast.error('You have to Login first to become a donor!', {
         style: {
           background: '#fee2e2',
@@ -84,15 +86,15 @@ const HeroSection = () => {
             onClick={handleSearch}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded flex items-center gap-2 shadow-lg transition cursor-pointer"
           >
-            🔍 FIND BLOOD
+            <span role="img" aria-label="search">🔍</span> FIND BLOOD
           </button>
         </div>
 
         <p className="mt-6 text-sm max-w-2xl mx-auto text-blue-100">
-          Nepal Blood is a non-profitable service motive circle of youths purely devoted for the welfare of the society. We work to encourage and inspire people to donate blood and provide fresh blood to the needy without any cost.
+          Jivan Setu is a non-profitable service motive circle of youths purely devoted for the welfare of the society. We work to encourage and inspire people to donate blood and provide fresh blood to the needy without any cost.
         </p>
 
-        {/* यहाँ नयाँ लजिक प्रयोग भएको बटन छ */}
+        {/* Button with updated authentication logic */}
         <button 
           onClick={handleBecomeDonorClick}
           className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded text-sm shadow cursor-pointer transition"

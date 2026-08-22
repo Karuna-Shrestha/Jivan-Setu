@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 1. useNavigate इम्पोर्ट गरियो
-import toast from 'react-hot-toast'; // 2. प्रिमियम पपअपको लागि toast इम्पोर्ट गरियो
+import { useNavigate } from 'react-router-dom'; // 1. Imported useNavigate
+import toast from 'react-hot-toast'; // 2. Imported toast for premium popups
 import Navbar from '../components/Navbar';
 import BlogCard from '../components/BlogCard';
 import Footer from '../components/Footer';
@@ -9,15 +9,16 @@ import EmergencyModal from '../components/EmergencyModal';
 import Foundation from '../components/Foundation'; 
 
 const Home = () => {
-  const navigate = useNavigate(); // 3. navigate हुक इनिसियलाइज गरिएको
+  const navigate = useNavigate(); // 3. Initialize navigate hook
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 4. इमर्जेन्सी बटन क्लिक गर्दा चल्ने सेकक्युरिटी फङ्गसन
+  // 4. Security function triggered on emergency button click
   const handleEmergencyClick = () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // TODO: Backend Developer - Validate if the user is currently authenticated (via Context, Redux, or API session)
+    const isAuthenticated = true; // Temporary mock: Change this based on actual auth state
     
-    if (!currentUser) {
-      // लगिन छैन भने प्रिमियम थिम-बेस्ड एरर पपअप देखाउने र लगिन पेजमा पठाउने
+    if (!isAuthenticated) {
+      // Show premium theme-based error popup and redirect to login page if not logged in
       toast.error('You have to Login first to request blood!', {
         style: {
           background: '#fee2e2',
@@ -32,12 +33,13 @@ const Home = () => {
       });
       navigate('/login');
     } else {
-      // लगिन छ भने मात्र इमर्जेन्सी मोडल खोल्ने
+      // Open emergency modal only if logged in
       setIsModalOpen(true);
     }
   };
 
-  // 5 dummy data entries for blogs
+  // TODO: Backend Developer - Fetch dynamic blog posts from the API if required.
+  // Currently using static dummy data for blogs.
   const blogsData = [
     {
       id: 1,
@@ -138,7 +140,7 @@ const Home = () => {
 
           {/* Right Column */}
           <aside className="w-full lg:w-1/3 flex flex-col gap-6 mt-8 lg:mt-0">
-             {/* 5. यहाँ setIsModalOpen को सट्टा नयाँ handleEmergencyClick रासिएको छ */}
+             {/* 5. handleEmergencyClick handles the emergency request logic */}
              <button 
                onClick={handleEmergencyClick}
                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 w-full uppercase text-sm shadow-md transition animate-pulse rounded cursor-pointer"
