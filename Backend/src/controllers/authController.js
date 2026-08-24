@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import db from "../config/db.js";
+
+dotenv.config();
 
 // ================= REGISTER =================
 
@@ -11,18 +14,22 @@ export const registerUser = async (req, res) => {
       email,
       password,
       phone,
-      age,
-      gender,
       blood_group,
-      district,
       address,
-      last_donation_date,
+      role,
     } = req.body;
 
     // Required fields
-    if (!full_name || !email || !password) {
+    if (
+      !full_name ||
+      !email ||
+      !password ||
+      !phone ||
+      !blood_group ||
+      !address
+    ) {
       return res.status(400).json({
-        message: "Full name, email and password are required",
+        message: "All required fields must be provided",
       });
     }
 
@@ -54,14 +61,11 @@ export const registerUser = async (req, res) => {
           email,
           password,
           phone,
-          age,
-          gender,
           blood_group,
-          district,
           address,
-          last_donation_date
+          role
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
 
       const values = [
@@ -69,12 +73,9 @@ export const registerUser = async (req, res) => {
         email,
         hashedPassword,
         phone,
-        age,
-        gender,
         blood_group,
-        district,
         address,
-        last_donation_date,
+        role || "user",
       ];
 
       db.query(sql, values, (err, result) => {
@@ -99,21 +100,18 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
 // ================= LOGIN =================
 
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Required fields
     if (!email || !password) {
       return res.status(400).json({
         message: "Email and password are required",
       });
     }
 
-    // Find user
     const sql = "SELECT * FROM users WHERE email = ?";
 
     db.query(sql, [email], async (err, result) => {
@@ -124,7 +122,6 @@ export const loginUser = async (req, res) => {
         });
       }
 
-      // User not found
       if (result.length === 0) {
         return res.status(404).json({
           message: "User not found",
@@ -133,7 +130,6 @@ export const loginUser = async (req, res) => {
 
       const user = result[0];
 
-      // Compare password
       const isPasswordMatch = await bcrypt.compare(
         password,
         user.password
@@ -145,20 +141,18 @@ export const loginUser = async (req, res) => {
         });
       }
 
-      // Create JWT token
       const token = jwt.sign(
         {
           id: user.id,
           email: user.email,
           role: user.role,
         },
-        "blooddonation_secret",
+        process.env.JWT_SECRET || "blooddonation_secret",
         {
           expiresIn: "1d",
         }
       );
 
-      // Successful response
       return res.status(200).json({
         message: "Login successful",
         token,
@@ -178,12 +172,10 @@ export const loginUser = async (req, res) => {
   }
 };
 
-
 // ================= GET PROFILE =================
 
 export const getProfile = async (req, res) => {
   try {
-    // JWT bata user ID
     const userId = req.user.id;
 
     const sql = `
@@ -192,15 +184,9 @@ export const getProfile = async (req, res) => {
         full_name,
         email,
         phone,
-        age,
-        gender,
         blood_group,
-        district,
         address,
-        last_donation_date,
-        is_available,
-        role,
-        created_at
+        role
       FROM users
       WHERE id = ?
     `;
@@ -215,14 +201,12 @@ export const getProfile = async (req, res) => {
         });
       }
 
-      // User not found
       if (result.length === 0) {
         return res.status(404).json({
           message: "User not found",
         });
       }
 
-      // Profile response
       return res.status(200).json({
         message: "Profile fetched successfully",
         user: result[0],

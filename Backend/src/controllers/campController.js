@@ -1,54 +1,54 @@
 import db from "../config/db.js";
 
-// Add Camp
 export const addCamp = (req, res) => {
-  const { title, date, location, description } = req.body;
+  const {
+    camp_name,
+    location,
+    date,
+    organizer,
+    contact_number,
+    description,
+  } = req.body;
 
-  if (!title || !date || !location) {
+  if (!camp_name || !location || !date) {
     return res.status(400).json({
-      message: "Title, date and location are required",
+      message: "Camp name, location and date are required",
     });
   }
 
   const sql = `
-    INSERT INTO camps (title, date, location, description)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO camps
+    (camp_name, location, date, organizer, contact_number, description)
+    VALUES (?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
     sql,
-    [title, date, location, description || null],
+    [camp_name, location, date, organizer || null, contact_number || null, description || null],
     (err, result) => {
       if (err) {
-        console.error(err);
-
-        return res.status(500).json({
-          message: "Failed to add camp",
-        });
+        console.error("Add camp error:", err);
+        return res.status(500).json({ message: "Database error", error: err.message });
       }
 
-      res.status(201).json({
+      return res.status(201).json({
         message: "Camp added successfully",
-        id: result.insertId,
+        camp_id: result.insertId,
       });
     }
   );
 };
 
-// Get All Camps
 export const getCamps = (req, res) => {
-  const sql = "SELECT * FROM camps ORDER BY id DESC";
+  const sql = "SELECT * FROM camps ORDER BY date DESC";
 
   db.query(sql, (err, result) => {
     if (err) {
-      console.error(err);
-
-      return res.status(500).json({
-        message: "Failed to fetch camps",
-      });
+      console.error("Get camps error:", err);
+      return res.status(500).json({ message: "Database error", error: err.message });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Camps fetched successfully",
       count: result.length,
       camps: result,
@@ -56,7 +56,6 @@ export const getCamps = (req, res) => {
   });
 };
 
-// Get Single Camp
 export const getCampById = (req, res) => {
   const { id } = req.params;
 
@@ -64,27 +63,21 @@ export const getCampById = (req, res) => {
 
   db.query(sql, [id], (err, result) => {
     if (err) {
-      console.error(err);
-
-      return res.status(500).json({
-        message: "Failed to fetch camp",
-      });
+      console.error("Get camp error:", err);
+      return res.status(500).json({ message: "Database error", error: err.message });
     }
 
     if (result.length === 0) {
-      return res.status(404).json({
-        message: "Camp not found",
-      });
+      return res.status(404).json({ message: "Camp not found" });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Camp fetched successfully",
       camp: result[0],
     });
   });
 };
 
-// Delete Camp
 export const deleteCamp = (req, res) => {
   const { id } = req.params;
 
@@ -92,21 +85,14 @@ export const deleteCamp = (req, res) => {
 
   db.query(sql, [id], (err, result) => {
     if (err) {
-      console.error(err);
-
-      return res.status(500).json({
-        message: "Failed to delete camp",
-      });
+      console.error("Delete camp error:", err);
+      return res.status(500).json({ message: "Database error", error: err.message });
     }
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({
-        message: "Camp not found",
-      });
+      return res.status(404).json({ message: "Camp not found" });
     }
 
-    res.status(200).json({
-      message: "Camp deleted successfully",
-    });
+    return res.status(200).json({ message: "Camp deleted successfully" });
   });
 };

@@ -1,19 +1,18 @@
-import express from "express";
+const isAdmin = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
 
-import {
-  addDonor,
-  getDonors,
-  getDonorById,
-  deleteDonor,
-} from "../controllers/donorController.js";
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      message: "Access denied. Admin only.",
+    });
+  }
 
-import authMiddleware from "./authMiddleware.js";
+  next();
+};
 
-const router = express.Router();
-
-router.post("/", authMiddleware, addDonor);
-router.get("/", getDonors);
-router.get("/:id", getDonorById);
-router.delete("/:id", deleteDonor);
-
-export default router;
+export { isAdmin };
+export default isAdmin;
